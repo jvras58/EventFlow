@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { ArrowLeft } from "lucide-react"
 import {
   Card,
   CardContent,
@@ -49,8 +50,15 @@ export function LoginForm() {
   }
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="relative pt-6">
+      <Link 
+        href="/" 
+        className="group flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors absolute top-6 left-6"
+      >
+        <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+        Voltar
+      </Link>
+      <CardHeader className="pt-8">
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
           Insira seu e-mail e senha para acessar (use admin@eventflow.com / admin123).
