@@ -25,12 +25,18 @@ export function ParticipanteFormDialog({ children, initialData }: ParticipanteFo
   const { token } = useAuth()
   const queryClient = useQueryClient()
 
-  // Buscar eventos internamente para o Select
   const { data: eventos = [] } = useQuery({
     queryKey: ['eventos'],
     queryFn: () => eventosApi.listEventos(token!),
-    enabled: !!token && isOpen, // Fetch apenas quando for aberto
+    enabled: !!token && isOpen,
   })
+
+  const defaultFormValues: ParticipanteInput = initialData ? {
+    nome: initialData.nome,
+    email: initialData.email,
+    eventoId: initialData.eventoId,
+    checkIn: initialData.checkIn ?? false
+  } : { nome: "", email: "", eventoId: "", checkIn: false }
 
   const {
     register,
@@ -41,22 +47,15 @@ export function ParticipanteFormDialog({ children, initialData }: ParticipanteFo
     formState: { errors },
   } = useForm<ParticipanteInput>({
     resolver: zodResolver(ParticipanteSchema),
-    defaultValues: { checkIn: false }
+    values: defaultFormValues
   })
 
-  React.useEffect(() => {
-    if (isOpen) {
-      if (initialData) {
-        reset({
-          nome: initialData.nome,
-          email: initialData.email,
-          eventoId: initialData.eventoId,
-        })
-      } else {
-        reset({ nome: "", email: "", eventoId: "" })
-      }
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open)
+    if (open) {
+      reset(defaultFormValues)
     }
-  }, [isOpen, initialData, reset])
+  }
 
   const eventoIdValue = watch("eventoId")
 
@@ -78,7 +77,7 @@ export function ParticipanteFormDialog({ children, initialData }: ParticipanteFo
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>

@@ -37,7 +37,7 @@ export function ProfileDialog({ open, onOpenChange }: ProfileDialogProps) {
     if (!token) return
     try {
       const result = await userApi.updateProfile(data, token)
-      login(result.token) // Atualiza com o novo token re-assinado
+      login(result.token)
       toast.success("Perfil atualizado com sucesso!")
       onOpenChange(false)
     } catch (error: any) {

@@ -15,21 +15,24 @@ interface RegrasEditorProps {
 
 export function RegrasEditor({ eventoId }: RegrasEditorProps) {
   const { token } = useAuth()
-  const queryClient = useQueryClient()
-  const [regrasLocais, setRegrasLocais] = React.useState<RegraCheckinInput[]>([])
 
-  const { data: regras = [], isLoading } = useQuery({
+  const { data: regras, isLoading } = useQuery({
     queryKey: ['regras', eventoId],
     queryFn: () => regrasCheckinApi.getRegras(eventoId, token!),
     enabled: !!token && !!eventoId,
   })
 
-  React.useEffect(() => {
-    // Quando receber os dados da API, seta no estado local
-    if (regras) {
-      setRegrasLocais(regras)
-    }
-  }, [regras])
+  if (isLoading || !regras) {
+    return <div>Carregando regras...</div>
+  }
+
+  return <RegrasForm eventoId={eventoId} initialRegras={regras} />
+}
+
+function RegrasForm({ eventoId, initialRegras }: { eventoId: string, initialRegras: RegraCheckinInput[] }) {
+  const { token } = useAuth()
+  const queryClient = useQueryClient()
+  const [regrasLocais, setRegrasLocais] = React.useState<RegraCheckinInput[]>(initialRegras)
 
   const saveMutation = useMutation({
     mutationFn: (novasRegras: RegraCheckinInput[]) => regrasCheckinApi.updateRegras(eventoId, novasRegras, token!),
@@ -60,10 +63,6 @@ export function RegrasEditor({ eventoId }: RegrasEditorProps) {
     const novas = [...regrasLocais]
     novas[index] = novaRegra
     setRegrasLocais(novas)
-  }
-
-  if (isLoading) {
-    return <div>Carregando regras...</div>
   }
 
   return (

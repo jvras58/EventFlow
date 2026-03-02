@@ -31,6 +31,13 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
   const { token } = useAuth()
   const queryClient = useQueryClient()
 
+  const defaultFormValues: EventoInput = initialData ? {
+    nome: initialData.nome,
+    local: initialData.local,
+    data: new Date(initialData.data).toISOString().substring(0, 16),
+    status: initialData.status as "ATIVO" | "ENCERRADO"
+  } : { nome: "", local: "", data: new Date().toISOString().substring(0, 16), status: "ATIVO" }
+
   const {
     register,
     handleSubmit,
@@ -40,25 +47,17 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
     formState: { errors },
   } = useForm<EventoInput>({
     resolver: zodResolver(EventoSchema),
-    defaultValues: { status: "ATIVO" }
+    values: defaultFormValues
   })
 
   const statusValue = watch("status")
 
-  React.useEffect(() => {
-    if (isOpen) {
-      if (initialData) {
-        reset({
-          nome: initialData.nome,
-          local: initialData.local,
-          data: new Date(initialData.data).toISOString().substring(0, 16) as any,
-          status: initialData.status
-        })
-      } else {
-        reset({ nome: "", local: "", data: new Date() as any, status: "ATIVO" })
-      }
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open)
+    if (open) {
+      reset(defaultFormValues)
     }
-  }, [isOpen, initialData, reset])
+  }
 
   const saveMutation = useMutation({
     mutationFn: (data: EventoInput) => {
@@ -78,7 +77,7 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
