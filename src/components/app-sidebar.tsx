@@ -1,6 +1,6 @@
 import * as React from "react"
 import Link from "next/link"
-import { Calendar, Home, Users } from "lucide-react"
+import { Calendar, CalendarCheck, Home, Users } from "lucide-react"
 
 import {
   Sidebar,
@@ -8,6 +8,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -35,6 +36,23 @@ const navigationData = [
 export function AppSidebar() {
   return (
     <Sidebar>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <Link href="/dashboard">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <CalendarCheck className="size-4" />
+                </div>
+                <div className="flex flex-col gap-0.5 leading-none">
+                  <span className="font-semibold">EventFlow</span>
+                  <span className="text-xs text-muted-foreground">Gerenciador de Eventos</span>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent className="pt-4">
         <SidebarGroup>
           <SidebarGroupContent>
