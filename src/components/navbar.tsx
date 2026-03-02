@@ -2,7 +2,6 @@ import * as React from "react"
 import Link from "next/link"
 
 import { ThemeToggle } from "./theme-toggle"
-import { UserNav } from "./user-nav"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 
 export function Navbar() {
@@ -17,7 +16,6 @@ export function Navbar() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <ThemeToggle />
-          <UserNav />
         </div>
       </div>
     </header>
