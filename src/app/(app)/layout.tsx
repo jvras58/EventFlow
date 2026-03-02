@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation"
 import { Navbar } from "@/components/navbar"
 import { AppSidebar } from "@/components/app-sidebar"
 
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
+
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isInitializing } = useAuth()
   const router = useRouter()
@@ -25,14 +27,14 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Navbar />
-      <div className="flex flex-1">
-        <AppSidebar />
+    <SidebarProvider>
+      <AppSidebar />
+      <SidebarInset>
+        <Navbar />
         <main className="flex-1">
           {children}
         </main>
-      </div>
-    </div>
+      </SidebarInset>
+    </SidebarProvider>
   )
 }
