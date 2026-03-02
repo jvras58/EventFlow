@@ -7,6 +7,8 @@ import { eventosApi } from "@/modules/eventos/services/eventos-api"
 import { ParticipantesTable } from "@/modules/participantes/components/participantes-table"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { useAuth } from "@/providers/auth-provider"
+import { Input } from "@/components/ui/input"
+import { Search } from "lucide-react"
 
 export function ParticipantesList() {
   const { token } = useAuth()
@@ -14,11 +16,19 @@ export function ParticipantesList() {
   
   const [isConfirmOpen, setIsConfirmOpen] = React.useState(false)
   const [deletingId, setDeletingId] = React.useState<string | null>(null)
+  const [searchQuery, setSearchQuery] = React.useState("")
 
   const { data: participantes = [], isLoading: isLoadingParts } = useQuery({
     queryKey: ['participantes'],
     queryFn: () => participantesApi.listParticipantes(token!),
     enabled: !!token,
+  })
+
+  const filteredParticipantes = participantes.filter(p => {
+    if (!searchQuery) return true
+    const lowerQuery = searchQuery.toLowerCase()
+    return p.nome.toLowerCase().includes(lowerQuery) || 
+           (p.evento?.nome && p.evento.nome.toLowerCase().includes(lowerQuery))
   })
   
   const deleteMutation = useMutation({
@@ -40,11 +50,23 @@ export function ParticipantesList() {
 
   return (
     <div className="space-y-4">
+      <div className="w-full md:w-1/3">
+        <div className="relative">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Pesquisar por nome ou evento..." 
+            className="pl-8" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
+
       {isLoadingParts ? (
         <div>Carregando...</div>
       ) : (
         <ParticipantesTable 
-          participantes={participantes}
+          participantes={filteredParticipantes}
           onDelete={id => { setDeletingId(id); setIsConfirmOpen(true); }}
         />
       )}
