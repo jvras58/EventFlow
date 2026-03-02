@@ -17,11 +17,11 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
-import { LoginSchema, LoginInput } from "../schemas/auth-schema"
+import { RegisterSchema, RegisterInput } from "../schemas/auth-schema"
 import { authApi } from "../services/auth-api"
 import { useAuth } from "@/providers/auth-provider"
 
-export function LoginForm() {
+export function RegisterForm() {
   const router = useRouter()
   const { login } = useAuth()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -30,19 +30,19 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginInput>({
-    resolver: zodResolver(LoginSchema),
+  } = useForm<RegisterInput>({
+    resolver: zodResolver(RegisterSchema),
   })
 
-  async function onSubmit(data: LoginInput) {
+  async function onSubmit(data: RegisterInput) {
     try {
       setIsLoading(true)
-      const res = await authApi.login(data)
+      const res = await authApi.register(data)
       login(res.data.token)
-      toast.success("Login realizado com sucesso!")
+      toast.success("Conta criada com sucesso!")
       router.push("/dashboard")
     } catch (error: any) {
-      toast.error(error.message || "Erro ao realizar login")
+      toast.error(error.message || "Erro ao criar conta")
     } finally {
       setIsLoading(false)
     }
@@ -51,9 +51,9 @@ export function LoginForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl">Criar Conta</CardTitle>
         <CardDescription>
-          Insira seu e-mail e senha para acessar (use admin@eventflow.com / 123).
+          Preencha os dados abaixo para se registrar na plataforma.
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -63,7 +63,7 @@ export function LoginForm() {
             <Input
               id="email"
               type="email"
-              placeholder="admin@eventflow.com"
+              placeholder="seu@email.com"
               {...register("email")}
             />
             {errors.email && (
@@ -75,22 +75,34 @@ export function LoginForm() {
             <Input
               id="senha"
               type="password"
-              placeholder="Sua senha"
+              placeholder="Criar senha"
               {...register("senha")}
             />
             {errors.senha && (
               <p className="text-sm text-destructive">{errors.senha.message}</p>
             )}
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirmSenha">Confirmar Senha</Label>
+            <Input
+              id="confirmSenha"
+              type="password"
+              placeholder="Confirmar senha"
+              {...register("confirmSenha")}
+            />
+            {errors.confirmSenha && (
+              <p className="text-sm text-destructive">{errors.confirmSenha.message}</p>
+            )}
+          </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4 pt-4">
           <Button className="w-full" type="submit" disabled={isLoading}>
-            {isLoading ? "Entrando..." : "Entrar"}
+            {isLoading ? "Criando..." : "Criar conta"}
           </Button>
           <div className="text-sm text-center text-muted-foreground w-full">
-            Não tem uma conta?{" "}
-            <Link href="/register" className="text-primary hover:underline">
-              Crie uma aqui
+            Já tem uma conta?{" "}
+            <Link href="/login" className="text-primary hover:underline">
+              Faça login
             </Link>
           </div>
         </CardFooter>

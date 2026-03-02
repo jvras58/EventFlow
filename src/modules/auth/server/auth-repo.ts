@@ -5,5 +5,10 @@ export const authRepo = {
         return prisma.user.findUnique({
             where: { email }
         })
+    },
+    createUser: async (data: { email: string; senha: string }) => {
+        return prisma.user.create({
+            data
+        })
     }
 }
