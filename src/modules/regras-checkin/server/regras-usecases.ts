@@ -16,7 +16,20 @@ export const regrasUsecases = {
         if (!validation.valid) {
             throw new Error(`Validação falhou: ${validation.errors.join(", ")}`)
         }
+        const result = await regrasRepo.replaceRegras(eventoId, regras)
 
-        return regrasRepo.replaceRegras(eventoId, regras)
+        if (regras.length > 0 && evento.status === "PENDENTE") {
+            await prisma.evento.update({
+                where: { id: eventoId },
+                data: { status: "ATIVO" }
+            })
+        } else if (regras.length === 0 && (evento.status === "ATIVO" || evento.status === "PENDENTE")) {
+            await prisma.evento.update({
+                where: { id: eventoId },
+                data: { status: "PENDENTE" }
+            })
+        }
+
+        return result
     }
 }

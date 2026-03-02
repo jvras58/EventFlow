@@ -20,7 +20,7 @@ model Evento {
   nome          String
   data          DateTime
   local         String
-  status        String         @default("ATIVO") // ATIVO | ENCERRADO
+  status        String         @default("ATIVO") // ATIVO | ENCERRADO | PENDENTE
   participantes Participante[]
   regras        RegraCheckin[]
   createdAt     DateTime       @default(now())

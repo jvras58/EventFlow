@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { EventoSchema, EventoInput } from "../schemas/evento-schema"
 import { Evento } from "../types/evento"
 import { eventosApi } from "../services/eventos-api"
+import { useRouter } from "next/navigation"
 import { useAuth } from "@/providers/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,13 +31,14 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
   const [isOpen, setIsOpen] = React.useState(false)
   const { token } = useAuth()
   const queryClient = useQueryClient()
+  const router = useRouter()
 
   const defaultFormValues: EventoInput = initialData ? {
     nome: initialData.nome,
     local: initialData.local,
     data: new Date(initialData.data).toISOString().substring(0, 16),
-    status: initialData.status as "ATIVO" | "ENCERRADO"
-  } : { nome: "", local: "", data: new Date().toISOString().substring(0, 16), status: "ATIVO" }
+    status: initialData.status as "ATIVO" | "ENCERRADO" | "PENDENTE"
+  } : { nome: "", local: "", data: new Date().toISOString().substring(0, 16), status: "PENDENTE" }
 
   const {
     register,
@@ -64,11 +66,14 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
       if (initialData) return eventosApi.updateEvento(initialData.id, data, token!)
       return eventosApi.createEvento(data, token!)
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       toast.success(initialData ? "Evento atualizado!" : "Evento criado!")
       setIsOpen(false)
       queryClient.invalidateQueries({ queryKey: ['eventos'] })
       queryClient.invalidateQueries({ queryKey: ['dashboardSummary'] })
+      if (!initialData && result?.id) {
+        router.push(`/eventos/${result.id}/regras-checkin`)
+      }
     },
     onError: (error: Error) => toast.error(error.message)
   })
@@ -102,19 +107,22 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
             <Input id="local" {...register("local")} />
             {errors.local && <p className="text-sm text-destructive">{errors.local.message}</p>}
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="status">Status</Label>
-            <Select value={statusValue} onValueChange={(val: "ATIVO" | "ENCERRADO") => setValue("status", val, { shouldValidate: true })}>
-              <SelectTrigger>
-                <SelectValue placeholder="Selecione um status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ATIVO">Ativo</SelectItem>
-                <SelectItem value="ENCERRADO">Encerrado</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.status && <p className="text-sm text-destructive">{errors.status.message}</p>}
-          </div>
+          {initialData && (
+            <div className="space-y-2">
+              <Label htmlFor="status">Status</Label>
+              <Select value={statusValue} onValueChange={(val: "ATIVO" | "ENCERRADO" | "PENDENTE") => setValue("status", val, { shouldValidate: true })}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione um status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="ATIVO">Ativo</SelectItem>
+                  <SelectItem value="ENCERRADO">Encerrado</SelectItem>
+                  <SelectItem value="PENDENTE">Pendente</SelectItem>
+                </SelectContent>
+              </Select>
+              {errors.status && <p className="text-sm text-destructive">{errors.status.message}</p>}
+            </div>
+          )}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancelar</Button>
             <Button type="submit" disabled={saveMutation.isPending}>
