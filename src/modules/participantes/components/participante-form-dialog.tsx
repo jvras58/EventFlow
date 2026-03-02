@@ -68,6 +68,7 @@ export function ParticipanteFormDialog({ children, initialData }: ParticipanteFo
       toast.success(initialData ? "Participante atualizado!" : "Participante cadastrado!")
       setIsOpen(false)
       queryClient.invalidateQueries({ queryKey: ['participantes'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboardSummary'] })
     },
     onError: (error: Error) => toast.error(error.message)
   })

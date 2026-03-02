@@ -39,6 +39,7 @@ export function TransferirParticipanteDialog({ children, participante }: Transfe
       toast.success("Participante transferido com sucesso!")
       setIsOpen(false)
       queryClient.invalidateQueries({ queryKey: ['participantes'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboardSummary'] })
     },
     onError: (error: Error) => toast.error(error.message)
   })

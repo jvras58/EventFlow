@@ -30,6 +30,7 @@ export function EventosList() {
     onSuccess: () => {
       toast.success("Evento excluído!")
       queryClient.invalidateQueries({ queryKey: ['eventos'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboardSummary'] })
     },
     onError: (error: Error) => toast.error(error.message)
   })

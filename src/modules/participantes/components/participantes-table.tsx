@@ -26,6 +26,7 @@ export function ParticipantesTable({ participantes, onDelete }: ParticipantesTab
     onSuccess: () => {
       toast.success("Status de check-in atualizado!")
       queryClient.invalidateQueries({ queryKey: ["participantes"] })
+      queryClient.invalidateQueries({ queryKey: ["dashboardSummary"] })
     },
     onError: (error: Error) => toast.error(error.message)
   })

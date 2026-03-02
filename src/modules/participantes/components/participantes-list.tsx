@@ -26,6 +26,7 @@ export function ParticipantesList() {
     onSuccess: () => {
       toast.success("Participante excluído!")
       queryClient.invalidateQueries({ queryKey: ['participantes'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboardSummary'] })
     },
     onError: (error: Error) => toast.error(error.message)
   })

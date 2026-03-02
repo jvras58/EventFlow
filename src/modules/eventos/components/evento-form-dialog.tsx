@@ -68,6 +68,7 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
       toast.success(initialData ? "Evento atualizado!" : "Evento criado!")
       setIsOpen(false)
       queryClient.invalidateQueries({ queryKey: ['eventos'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboardSummary'] })
     },
     onError: (error: Error) => toast.error(error.message)
   })
