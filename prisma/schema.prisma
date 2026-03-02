@@ -8,10 +8,11 @@ datasource db {
 }
 
 model User {
-  id    String  @id @default(cuid())
-  email String  @unique
-  senha String
-  nome  String?
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  nome         String?
+  createdAt    DateTime @default(now())
 }
 
 model Evento {
@@ -19,6 +20,7 @@ model Evento {
   nome          String
   data          DateTime
   local         String
+  status        String         @default("ATIVO") // ATIVO | ENCERRADO
   participantes Participante[]
   regras        RegraCheckin[]
   createdAt     DateTime       @default(now())
@@ -27,17 +29,23 @@ model Evento {
 model Participante {
   id        String   @id @default(cuid())
   nome      String
-  email     String   @unique
+  email     String
   eventoId  String
-  evento    Evento   @relation(fields: [eventoId], references: [id])
+  evento    Evento   @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+  checkIn   Boolean  @default(false)
   createdAt DateTime @default(now())
+
+  @@unique([email, eventoId])
 }
 
 model RegraCheckin {
-  id       String  @id @default(cuid())
-  nome     String
-  tipo     String // "HORARIO", "DOCUMENTO", "PAGAMENTO"
-  ativa    Boolean @default(true)
-  eventoId String
-  evento   Evento  @relation(fields: [eventoId], references: [id])
+  id                String   @id @default(cuid())
+  eventoId          String
+  evento            Evento   @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+  nomeRegra         String
+  ativo             Boolean  @default(true)
+  obrigatorio       Boolean  @default(true)
+  liberarMinAntes   Int
+  encerrarMinDepois Int
+  createdAt         DateTime @default(now())
 }

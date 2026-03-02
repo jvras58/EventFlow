@@ -8,11 +8,11 @@ async function main() {
     const user = await prisma.user.upsert({
         where: { email: 'admin@eventflow.com' },
         update: {
-            senha: hashedPassword
+            passwordHash: hashedPassword
         },
         create: {
             email: 'admin@eventflow.com',
-            senha: hashedPassword,
+            passwordHash: hashedPassword,
         },
     })
 
@@ -24,8 +24,8 @@ async function main() {
             local: 'São Paulo, SP',
             regras: {
                 create: [
-                    { nome: 'Check-in Antecipado', tipo: 'HORARIO', ativa: true },
-                    { nome: 'Documento c/ Foto', tipo: 'DOCUMENTO', ativa: true },
+                    { nomeRegra: 'Acesso Prime', ativo: true, obrigatorio: true, liberarMinAntes: 120, encerrarMinDepois: 0 },
+                    { nomeRegra: 'Documento c/ Foto', ativo: true, obrigatorio: true, liberarMinAntes: 60, encerrarMinDepois: 60 },
                 ]
             }
         }
