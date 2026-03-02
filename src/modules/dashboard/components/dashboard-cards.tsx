@@ -1,28 +1,25 @@
 "use client"
 import * as React from "react"
+import { useQuery } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { dashboardApi, DashboardSummary } from "../services/dashboard-api"
+import { dashboardApi } from "../services/dashboard-api"
 import { useAuth } from "@/providers/auth-provider"
 import { CalendarIcon, UsersIcon } from "lucide-react"
 
 export function DashboardCards() {
   const { token } = useAuth()
-  const [summary, setSummary] = React.useState<DashboardSummary | null>(null)
-  const [error, setError] = React.useState("")
 
-  React.useEffect(() => {
-    if (!token) return
-
-    dashboardApi.getSummary(token)
-      .then(setSummary)
-      .catch(err => setError(err.message))
-  }, [token])
+  const { data: summary, isLoading, error } = useQuery({
+    queryKey: ['dashboardSummary'],
+    queryFn: () => dashboardApi.getSummary(token!),
+    enabled: !!token,
+  })
 
   if (error) {
-    return <div className="text-destructive">{error}</div>
+    return <div className="text-destructive">{(error as Error).message}</div>
   }
 
-  if (!summary) {
+  if (isLoading || !summary) {
     return <div>Carregando dashboard...</div>
   }
 

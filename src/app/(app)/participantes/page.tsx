@@ -1,6 +1,7 @@
 "use client"
 import * as React from "react"
 import { ContentLayout } from "@/components/content-layout"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/providers/auth-provider"
@@ -16,11 +17,8 @@ import { TransferirParticipanteDialog } from "@/modules/participantes/components
 
 export default function ParticipantesPage() {
   const { token } = useAuth()
+  const queryClient = useQueryClient()
   
-  const [participantes, setParticipantes] = React.useState<Participante[]>([])
-  const [eventos, setEventos] = React.useState<Evento[]>([])
-  const [isLoading, setIsLoading] = React.useState(true)
-
   // Modals
   const [isFormOpen, setIsFormOpen] = React.useState(false)
   const [editingPart, setEditingPart] = React.useState<Participante | null>(null)
@@ -31,65 +29,66 @@ export default function ParticipantesPage() {
   const [isConfirmOpen, setIsConfirmOpen] = React.useState(false)
   const [deletingId, setDeletingId] = React.useState<string | null>(null)
 
-  const loadData = React.useCallback(async () => {
-    if (!token) return
-    try {
-      setIsLoading(true)
-      const [partsData, evsData] = await Promise.all([
-        participantesApi.listParticipantes(token),
-        eventosApi.listEventos(token)
-      ])
-      setParticipantes(partsData)
-      setEventos(evsData)
-    } catch (error: any) {
-      toast.error(error.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [token])
+  const { data: participantes = [], isLoading: isLoadingParts } = useQuery({
+    queryKey: ['participantes'],
+    queryFn: () => participantesApi.listParticipantes(token!),
+    enabled: !!token,
+  })
 
-  React.useEffect(() => {
-    loadData()
-  }, [loadData])
+  const { data: eventos = [], isLoading: isLoadingEvs } = useQuery({
+    queryKey: ['eventos'],
+    queryFn: () => eventosApi.listEventos(token!),
+    enabled: !!token,
+  })
+
+  const isLoading = isLoadingParts || isLoadingEvs
+
+  const saveMutation = useMutation({
+    mutationFn: (param: { data: ParticipanteInput, id?: string }) => {
+      if (param.id) return participantesApi.updateParticipante(param.id, param.data, token!)
+      return participantesApi.createParticipante(param.data, token!)
+    },
+    onSuccess: (data, variables) => {
+      toast.success(variables.id ? "Participante atualizado!" : "Participante cadastrado!")
+      setIsFormOpen(false)
+      queryClient.invalidateQueries({ queryKey: ['participantes'] })
+    },
+    onError: (error: Error) => toast.error(error.message)
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => participantesApi.deleteParticipante(id, token!),
+    onSuccess: () => {
+      toast.success("Participante excluído!")
+      queryClient.invalidateQueries({ queryKey: ['participantes'] })
+    },
+    onError: (error: Error) => toast.error(error.message)
+  })
+
+  const transferMutation = useMutation({
+    mutationFn: (param: { id: string, novoEventoId: string }) => 
+      participantesApi.updateParticipante(param.id, { eventoId: param.novoEventoId }, token!),
+    onSuccess: () => {
+      toast.success("Participante transferido com sucesso!")
+      setIsTransferOpen(false)
+      queryClient.invalidateQueries({ queryKey: ['participantes'] })
+    },
+    onError: (error: Error) => toast.error(error.message)
+  })
 
   const handleSave = async (data: ParticipanteInput, id?: string) => {
-    if (!token) return
-    try {
-      if (id) {
-        await participantesApi.updateParticipante(id, data, token)
-        toast.success("Participante atualizado!")
-      } else {
-        await participantesApi.createParticipante(data, token)
-        toast.success("Participante cadastrado!")
-      }
-      setIsFormOpen(false)
-      loadData()
-    } catch (error: any) {
-      toast.error(error.message)
-    }
+    saveMutation.mutate({ data, id })
   }
 
-  const handleDelete = async () => {
-    if (!token || !deletingId) return
-    try {
-      await participantesApi.deleteParticipante(deletingId, token)
-      toast.success("Participante excluído!")
-      loadData()
-    } catch (error: any) {
-      toast.error(error.message)
+  const handleDelete = () => {
+    if (deletingId) {
+      deleteMutation.mutate(deletingId)
+      setIsConfirmOpen(false)
     }
   }
 
   const handleTransfer = async (participanteId: string, novoEventoId: string) => {
-    if (!token) return
-    try {
-      await participantesApi.updateParticipante(participanteId, { eventoId: novoEventoId }, token)
-      toast.success("Participante transferido com sucesso!")
-      setIsTransferOpen(false)
-      loadData()
-    } catch (error: any) {
-      toast.error(error.message)
-    }
+    transferMutation.mutate({ id: participanteId, novoEventoId })
   }
 
   return (

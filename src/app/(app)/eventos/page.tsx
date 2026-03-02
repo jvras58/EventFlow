@@ -2,6 +2,7 @@
 import * as React from "react"
 import { useRouter } from "next/navigation"
 import { ContentLayout } from "@/components/content-layout"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { ConfirmDialog } from "@/components/confirm-dialog"
 import { Button } from "@/components/ui/button"
 import { useAuth } from "@/providers/auth-provider"
@@ -16,10 +17,9 @@ import { EventoFormDialog } from "@/modules/eventos/components/evento-form-dialo
 export default function EventosPage() {
   const router = useRouter()
   const { token } = useAuth()
+  const queryClient = useQueryClient()
   
-  const [eventos, setEventos] = React.useState<Evento[]>([])
   const [busca, setBusca] = React.useState("")
-  const [isLoading, setIsLoading] = React.useState(true)
 
   // Dialog states
   const [isFormOpen, setIsFormOpen] = React.useState(false)
@@ -28,48 +28,42 @@ export default function EventosPage() {
   const [isConfirmOpen, setIsConfirmOpen] = React.useState(false)
   const [deletingId, setDeletingId] = React.useState<string | null>(null)
 
-  const loadEventos = React.useCallback(async () => {
-    if (!token) return
-    try {
-      setIsLoading(true)
-      const data = await eventosApi.listEventos(token)
-      setEventos(data)
-    } catch (error: any) {
-      toast.error(error.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }, [token])
+  const { data: eventos = [], isLoading } = useQuery({
+    queryKey: ['eventos'],
+    queryFn: () => eventosApi.listEventos(token!),
+    enabled: !!token,
+  })
 
-  React.useEffect(() => {
-    loadEventos()
-  }, [loadEventos])
+  const saveMutation = useMutation({
+    mutationFn: (param: { data: EventoInput, id?: string }) => {
+      if (param.id) return eventosApi.updateEvento(param.id, param.data, token!)
+      return eventosApi.createEvento(param.data, token!)
+    },
+    onSuccess: (data, variables) => {
+      toast.success(variables.id ? "Evento atualizado!" : "Evento criado!")
+      setIsFormOpen(false)
+      queryClient.invalidateQueries({ queryKey: ['eventos'] })
+    },
+    onError: (error: Error) => toast.error(error.message)
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => eventosApi.deleteEvento(id, token!),
+    onSuccess: () => {
+      toast.success("Evento excluído!")
+      queryClient.invalidateQueries({ queryKey: ['eventos'] })
+    },
+    onError: (error: Error) => toast.error(error.message)
+  })
 
   const handleSave = async (data: EventoInput, id?: string) => {
-    if (!token) return
-    try {
-      if (id) {
-        await eventosApi.updateEvento(id, data, token)
-        toast.success("Evento atualizado!")
-      } else {
-        await eventosApi.createEvento(data, token)
-        toast.success("Evento criado!")
-      }
-      setIsFormOpen(false)
-      loadEventos()
-    } catch (error: any) {
-      toast.error(error.message)
-    }
+    saveMutation.mutate({ data, id })
   }
 
-  const handleDelete = async () => {
-    if (!token || !deletingId) return
-    try {
-      await eventosApi.deleteEvento(deletingId, token)
-      toast.success("Evento excluído!")
-      loadEventos()
-    } catch (error: any) {
-      toast.error(error.message)
+  const handleDelete = () => {
+    if (deletingId) {
+      deleteMutation.mutate(deletingId)
+      setIsConfirmOpen(false)
     }
   }
 
