@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma"
 import { UserUpdateInput } from "../schemas/user-schema"
 
 const JWT_SECRET = new TextEncoder().encode(
-    process.env.JWT_SECRET || "vlab-desafio-secret-key-123"
+    process.env.JWT_SECRET || "event-flow-secret-key-123"
 )
 
 export const userUsecases = {

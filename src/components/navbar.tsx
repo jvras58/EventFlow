@@ -10,7 +10,7 @@ export function Navbar() {
       <div className="container mx-auto flex h-14 items-center gap-4 px-4 md:px-6">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold sm:inline-block text-primary">VLab Desafio</span>
+            <span className="font-bold sm:inline-block text-primary">EventFlow</span>
           </Link>
           <nav className="flex items-center gap-6 text-sm font-medium">
             <Link href="/dashboard" className="transition-colors hover:text-foreground/80 text-foreground/60 hidden md:inline-block">Dashboard</Link>

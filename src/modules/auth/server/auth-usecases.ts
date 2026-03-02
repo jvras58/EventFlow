@@ -3,7 +3,7 @@ import { LoginInput } from "../schemas/auth-schema"
 import { SignJWT } from "jose"
 
 const JWT_SECRET = new TextEncoder().encode(
-    process.env.JWT_SECRET || "vlab-desafio-secret-key-123"
+    process.env.JWT_SECRET || "event-flow-secret-key-123"
 )
 
 export const authUsecases = {

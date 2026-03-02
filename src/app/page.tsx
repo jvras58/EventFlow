@@ -10,10 +10,10 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+            <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
               <CalendarCheck className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold tracking-tight">VLab Events</span>
+            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary to-violet-400 bg-clip-text text-transparent">EventFlow</span>
           </div>
           <div className="flex items-center gap-4">
             <ThemeToggle />
@@ -29,14 +29,20 @@ export default function LandingPage() {
 
       <main className="flex-1">
         {/* Hero Section */}
-        <section className="w-full py-24 md:py-32 lg:py-48 bg-gradient-to-b from-background to-muted/50">
-          <div className="container mx-auto px-4 md:px-6 text-center">
+        <section className="relative w-full py-24 md:py-32 lg:py-48 overflow-hidden">
+          {/* Decorative background elements */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl opacity-50 pointer-events-none">
+            <div className="absolute top-[20%] left-[20%] w-72 h-72 bg-primary/30 rounded-full blur-[100px] mix-blend-screen" />
+            <div className="absolute top-[40%] right-[20%] w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] mix-blend-screen" />
+          </div>
+          
+          <div className="container relative mx-auto px-4 md:px-6 text-center z-10">
             <div className="space-y-6 max-w-3xl mx-auto flex flex-col items-center">
-              <div className="inline-block rounded-full bg-primary/10 px-3 py-1 text-sm text-primary font-medium mb-4">
-                Desafio Técnico VLab
+              <div className="inline-block rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-sm text-primary font-medium mb-4 backdrop-blur-sm shadow-sm opacity-90">
+                Apresentando EventFlow 2.0
               </div>
               <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-                Gestão Inteligente de Eventos e Check-ins
+                Gestão <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-violet-400">Inteligente</span> de Eventos e Check-ins
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
                 Plataforma completa para controle de eventos, participantes e validações de regras complexas de entrada. Construído para ser rápido, acessível e seguro.
@@ -55,7 +61,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <p className="text-sm text-muted-foreground mt-4">
-                Use <strong className="text-foreground">admin@vlab.com</strong> / <strong className="text-foreground">123</strong> para testar.
+                Use <strong className="text-foreground">admin@eventflow.com</strong> / <strong className="text-foreground">123</strong> para testar.
               </p>
             </div>
           </div>
@@ -106,10 +112,12 @@ export default function LandingPage() {
         </section>
 
         {/* Testimonials */}
-        <section className="w-full py-20 bg-muted/40">
-          <div className="container mx-auto px-4 md:px-6">
+        <section className="relative w-full py-20 bg-muted/30 overflow-hidden">
+           {/* Subtle background glow */}
+           <div className="absolute bottom-0 right-0 w-full max-w-lg h-64 bg-primary/5 rounded-t-full blur-[100px] pointer-events-none" />
+           <div className="container relative mx-auto px-4 md:px-6 z-10">
              <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">O que dizem sobre o VLab</h2>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">O que dizem sobre o EventFlow</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="p-6 rounded-xl border bg-background shadow-sm">
@@ -183,9 +191,12 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t py-6 bg-background">
+      <footer className="w-full border-t border-primary/10 py-8 bg-background/50 backdrop-blur-md">
         <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© 2026 VLab. Todos os direitos reservados.</p>
+          <div className="flex items-center gap-2">
+            <CalendarCheck className="h-4 w-4 text-primary" />
+            <p>© 2026 EventFlow. Todos os direitos reservados.</p>
+          </div>
           <div className="flex gap-4">
             <Link href="#" className="hover:underline">Termos</Link>
             <Link href="#" className="hover:underline">Privacidade</Link>

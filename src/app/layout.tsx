@@ -16,8 +16,8 @@ import { RootProvider } from "@/providers/root-provider";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
-  title: "VLab Desafio",
-  description: "Desafio de Eventos e Check-in",
+  title: "EventFlow",
+  description: "Sistema inteligente de gestão de eventos",
 };
 
 export default function RootLayout({

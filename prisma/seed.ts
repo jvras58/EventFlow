@@ -3,10 +3,10 @@ const prisma = new PrismaClient()
 
 async function main() {
     const user = await prisma.user.upsert({
-        where: { email: 'admin@vlab.com' },
+        where: { email: 'admin@eventflow.com' },
         update: {},
         create: {
-            email: 'admin@vlab.com',
+            email: 'admin@eventflow.com',
             senha: '123', // Em um app real, colocaríamos um hash real aqui
         },
     })
@@ -14,7 +14,7 @@ async function main() {
     // Create Evento keeping it simple
     const evento = await prisma.evento.create({
         data: {
-            nome: 'VLab Conf 2026',
+            nome: 'EventFlow Conf 2026',
             data: new Date(new Date().setHours(new Date().getHours() + 48)),
             local: 'São Paulo, SP',
             regras: {
