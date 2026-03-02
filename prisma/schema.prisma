@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id    String @id @default(cuid())
+  email String @unique
+  senha String
+}
+
+model Evento {
+  id            String         @id @default(cuid())
+  nome          String
+  data          DateTime
+  local         String
+  participantes Participante[]
+  regras        RegraCheckin[]
+  createdAt     DateTime       @default(now())
+}
+
+model Participante {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  eventoId  String
+  evento    Evento   @relation(fields: [eventoId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model RegraCheckin {
+  id        String   @id @default(cuid())
+  nome      String
+  tipo      String   // "HORARIO", "DOCUMENTO", "PAGAMENTO"
+  ativa     Boolean  @default(true)
+  eventoId  String
+  evento    Evento   @relation(fields: [eventoId], references: [id])
+}
