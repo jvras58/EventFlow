@@ -62,6 +62,19 @@ npm run dev
 
 Acesse: [http://localhost:3000](http://localhost:3000)
 
+### 5. Executar os Testes
+
+Este projeto utiliza **Jest** em conjunto com **React Testing Library** para testes unitários e de integração.
+Para rodar a suíte de testes, utilize os seguintes comandos:
+
+```bash
+# Rodar todos os testes de uma vez
+npm run test
+
+# Rodar os testes em modo watch (reexecuta com a mudança de arquivos)
+npm run test:watch
+```
+
 ***
 
 ## 🧩 Arquitetura (Components vs Modules)
