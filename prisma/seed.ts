@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
 async function main() {
-    const hashedPassword = await bcrypt.hash('123', 10)
+    const hashedPassword = await bcrypt.hash('admin123', 10)
 
     const user = await prisma.user.upsert({
         where: { email: 'admin@eventflow.com' },
