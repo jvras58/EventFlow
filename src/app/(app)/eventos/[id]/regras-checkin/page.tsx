@@ -3,8 +3,8 @@ import { RegrasEditor } from "@/modules/regras-checkin/components/regras-editor"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-export default function RegrasCheckinPage({ params }: { params: { id: string } }) {
-  const { id } = params
+export default async function RegrasCheckinPage({ params }: { params: { id: string } }) {
+  const { id } = await params
 
   return (
     <ContentLayout
