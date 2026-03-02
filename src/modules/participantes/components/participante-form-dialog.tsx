@@ -2,31 +2,43 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
 import { ParticipanteSchema, ParticipanteInput } from "../schemas/participante-schema"
 import { Participante } from "../types/participante"
-import { Evento } from "@/modules/eventos/types/evento"
+import { participantesApi } from "../services/participantes-api"
+import { eventosApi } from "@/modules/eventos/services/eventos-api"
+import { useAuth } from "@/providers/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog"
 
 interface ParticipanteFormDialogProps {
-  isOpen: boolean
-  onClose: () => void
-  onSave: (data: ParticipanteInput, id?: string) => Promise<void>
+  children: React.ReactNode
   initialData?: Participante | null
-  eventos: Evento[]
 }
 
-export function ParticipanteFormDialog({ isOpen, onClose, onSave, initialData, eventos }: ParticipanteFormDialogProps) {
+export function ParticipanteFormDialog({ children, initialData }: ParticipanteFormDialogProps) {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const { token } = useAuth()
+  const queryClient = useQueryClient()
+
+  // Buscar eventos internamente para o Select
+  const { data: eventos = [] } = useQuery({
+    queryKey: ['eventos'],
+    queryFn: () => eventosApi.listEventos(token!),
+    enabled: !!token && isOpen, // Fetch apenas quando for aberto
+  })
+
   const {
     register,
     handleSubmit,
     setValue,
     watch,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<ParticipanteInput>({
     resolver: zodResolver(ParticipanteSchema),
   })
@@ -47,12 +59,28 @@ export function ParticipanteFormDialog({ isOpen, onClose, onSave, initialData, e
 
   const eventoIdValue = watch("eventoId")
 
+  const saveMutation = useMutation({
+    mutationFn: (data: ParticipanteInput) => {
+      if (initialData) return participantesApi.updateParticipante(initialData.id, data, token!)
+      return participantesApi.createParticipante(data, token!)
+    },
+    onSuccess: () => {
+      toast.success(initialData ? "Participante atualizado!" : "Participante cadastrado!")
+      setIsOpen(false)
+      queryClient.invalidateQueries({ queryKey: ['participantes'] })
+    },
+    onError: (error: Error) => toast.error(error.message)
+  })
+
   const onSubmit = async (data: ParticipanteInput) => {
-    await onSave(data, initialData?.id)
+    saveMutation.mutate(data)
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{initialData ? "Editar Participante" : "Novo Participante"}</DialogTitle>
@@ -83,8 +111,10 @@ export function ParticipanteFormDialog({ isOpen, onClose, onSave, initialData, e
             {errors.eventoId && <p className="text-sm text-destructive">{errors.eventoId.message}</p>}
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>Cancelar</Button>
-            <Button type="submit" disabled={isSubmitting}>Salvar</Button>
+            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancelar</Button>
+            <Button type="submit" disabled={saveMutation.isPending}>
+              {saveMutation.isPending ? "Salvando..." : "Salvar"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

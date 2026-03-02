@@ -3,15 +3,15 @@ import * as React from "react"
 import { Participante } from "../types/participante"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { ParticipanteFormDialog } from "./participante-form-dialog"
+import { TransferirParticipanteDialog } from "./transferir-participante-dialog"
 
 interface ParticipantesTableProps {
   participantes: Participante[]
-  onEdit: (part: Participante) => void
   onDelete: (id: string) => void
-  onTransfer: (part: Participante) => void
 }
 
-export function ParticipantesTable({ participantes, onEdit, onDelete, onTransfer }: ParticipantesTableProps) {
+export function ParticipantesTable({ participantes, onDelete }: ParticipantesTableProps) {
   if (participantes.length === 0) {
     return <div className="p-4 text-center text-muted-foreground">Nenhum participante encontrado.</div>
   }
@@ -34,8 +34,12 @@ export function ParticipantesTable({ participantes, onEdit, onDelete, onTransfer
               <TableCell>{part.email}</TableCell>
               <TableCell>{part.evento?.nome || "-"}</TableCell>
               <TableCell className="text-right space-x-2">
-                <Button variant="outline" size="sm" onClick={() => onTransfer(part)}>Transferir</Button>
-                <Button variant="secondary" size="sm" onClick={() => onEdit(part)}>Editar</Button>
+                <TransferirParticipanteDialog participante={part}>
+                  <Button variant="outline" size="sm">Transferir</Button>
+                </TransferirParticipanteDialog>
+                <ParticipanteFormDialog initialData={part}>
+                  <Button variant="secondary" size="sm">Editar</Button>
+                </ParticipanteFormDialog>
                 <Button variant="destructive" size="sm" onClick={() => onDelete(part.id)}>Excluir</Button>
               </TableCell>
             </TableRow>

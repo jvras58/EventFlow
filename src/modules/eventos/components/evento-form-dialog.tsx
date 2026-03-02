@@ -2,8 +2,12 @@
 import * as React from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
 import { EventoSchema, EventoInput } from "../schemas/evento-schema"
 import { Evento } from "../types/evento"
+import { eventosApi } from "../services/eventos-api"
+import { useAuth } from "@/providers/auth-provider"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -13,21 +17,24 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog"
 
 interface EventoFormDialogProps {
-  isOpen: boolean
-  onClose: () => void
-  onSave: (data: EventoInput, id?: string) => Promise<void>
+  children: React.ReactNode
   initialData?: Evento | null
 }
 
-export function EventoFormDialog({ isOpen, onClose, onSave, initialData }: EventoFormDialogProps) {
+export function EventoFormDialog({ children, initialData }: EventoFormDialogProps) {
+  const [isOpen, setIsOpen] = React.useState(false)
+  const { token } = useAuth()
+  const queryClient = useQueryClient()
+
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<EventoInput>({
     resolver: zodResolver(EventoSchema),
   })
@@ -46,12 +53,28 @@ export function EventoFormDialog({ isOpen, onClose, onSave, initialData }: Event
     }
   }, [isOpen, initialData, reset])
 
+  const saveMutation = useMutation({
+    mutationFn: (data: EventoInput) => {
+      if (initialData) return eventosApi.updateEvento(initialData.id, data, token!)
+      return eventosApi.createEvento(data, token!)
+    },
+    onSuccess: () => {
+      toast.success(initialData ? "Evento atualizado!" : "Evento criado!")
+      setIsOpen(false)
+      queryClient.invalidateQueries({ queryKey: ['eventos'] })
+    },
+    onError: (error: Error) => toast.error(error.message)
+  })
+
   const onSubmit = async (data: EventoInput) => {
-    await onSave(data, initialData?.id)
+    saveMutation.mutate(data)
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{initialData ? "Editar Evento" : "Novo Evento"}</DialogTitle>
@@ -73,8 +96,10 @@ export function EventoFormDialog({ isOpen, onClose, onSave, initialData }: Event
             {errors.local && <p className="text-sm text-destructive">{errors.local.message}</p>}
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>Cancelar</Button>
-            <Button type="submit" disabled={isSubmitting}>Salvar</Button>
+            <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancelar</Button>
+            <Button type="submit" disabled={saveMutation.isPending}>
+              {saveMutation.isPending ? "Salvando..." : "Salvar"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

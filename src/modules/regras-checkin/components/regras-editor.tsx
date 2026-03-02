@@ -1,36 +1,63 @@
+"use client"
 import * as React from "react"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { toast } from "sonner"
 import { RegraCheckinInput, validateRegras } from "../schemas/regra-checkin-schema"
+import { regrasCheckinApi } from "../services/regras-checkin-api"
+import { useAuth } from "@/providers/auth-provider"
 import { RegraItem } from "./regra-item"
 import { ValidacaoAlert } from "./validacao-alert"
 import { Button } from "@/components/ui/button"
 
 interface RegrasEditorProps {
-  initialRegras: RegraCheckinInput[]
-  onSave: (regras: RegraCheckinInput[]) => Promise<void>
-  isSaving: boolean
+  eventoId: string
 }
 
-export function RegrasEditor({ initialRegras, onSave, isSaving }: RegrasEditorProps) {
-  const [regras, setRegras] = React.useState<RegraCheckinInput[]>([])
+export function RegrasEditor({ eventoId }: RegrasEditorProps) {
+  const { token } = useAuth()
+  const queryClient = useQueryClient()
+  const [regrasLocais, setRegrasLocais] = React.useState<RegraCheckinInput[]>([])
+
+  const { data: regras = [], isLoading } = useQuery({
+    queryKey: ['regras', eventoId],
+    queryFn: () => regrasCheckinApi.getRegras(eventoId, token!),
+    enabled: !!token && !!eventoId,
+  })
 
   React.useEffect(() => {
-    setRegras(initialRegras)
-  }, [initialRegras])
+    // Quando receber os dados da API, seta no estado local
+    if (regras) {
+      setRegrasLocais(regras)
+    }
+  }, [regras])
 
-  const validation = React.useMemo(() => validateRegras(regras), [regras])
+  const saveMutation = useMutation({
+    mutationFn: (novasRegras: RegraCheckinInput[]) => regrasCheckinApi.updateRegras(eventoId, novasRegras, token!),
+    onSuccess: () => {
+      toast.success("Regras salvas com sucesso!")
+      queryClient.invalidateQueries({ queryKey: ['regras', eventoId] })
+    },
+    onError: (error: Error) => toast.error(error.message)
+  })
+
+  const validation = React.useMemo(() => validateRegras(regrasLocais), [regrasLocais])
 
   const handleAdd = () => {
-    setRegras([...regras, { nome: "Nova Regra", tipo: "HORARIO", ativa: true }])
+    setRegrasLocais([...regrasLocais, { nome: "Nova Regra", tipo: "HORARIO", ativa: true }])
   }
 
   const handleRemove = (index: number) => {
-    setRegras(regras.filter((_, i) => i !== index))
+    setRegrasLocais(regrasLocais.filter((_, i) => i !== index))
   }
 
   const handleChange = (index: number, novaRegra: RegraCheckinInput) => {
-    const novas = [...regras]
+    const novas = [...regrasLocais]
     novas[index] = novaRegra
-    setRegras(novas)
+    setRegrasLocais(novas)
+  }
+
+  if (isLoading) {
+    return <div>Carregando regras...</div>
   }
 
   return (
@@ -38,7 +65,7 @@ export function RegrasEditor({ initialRegras, onSave, isSaving }: RegrasEditorPr
       <ValidacaoAlert errors={validation.errors} />
 
       <div className="space-y-4">
-        {regras.map((regra, index) => (
+        {regrasLocais.map((regra, index) => (
           <RegraItem 
             key={index}
             index={index}
@@ -48,7 +75,7 @@ export function RegrasEditor({ initialRegras, onSave, isSaving }: RegrasEditorPr
           />
         ))}
 
-        {regras.length === 0 && (
+        {regrasLocais.length === 0 && (
           <div className="text-center p-8 border border-dashed rounded-lg text-muted-foreground">
             O evento não possui nenhuma regra configurada.
           </div>
@@ -58,10 +85,10 @@ export function RegrasEditor({ initialRegras, onSave, isSaving }: RegrasEditorPr
       <div className="flex items-center justify-between">
         <Button variant="outline" onClick={handleAdd}>+ Adicionar Regra</Button>
         <Button 
-          onClick={() => onSave(regras)} 
-          disabled={!validation.valid || isSaving || regras.length === 0}
+          onClick={() => saveMutation.mutate(regrasLocais)} 
+          disabled={!validation.valid || saveMutation.isPending || regrasLocais.length === 0}
         >
-          {isSaving ? "Salvando..." : "Salvar Alterações"}
+          {saveMutation.isPending ? "Salvando..." : "Salvar Alterações"}
         </Button>
       </div>
     </div>

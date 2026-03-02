@@ -3,15 +3,15 @@ import * as React from "react"
 import { Evento } from "../types/evento"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { EventoFormDialog } from "./evento-form-dialog"
 
 interface EventosTableProps {
   eventos: Evento[]
-  onEdit: (evento: Evento) => void
   onDelete: (id: string) => void
   onViewRegras: (id: string) => void
 }
 
-export function EventosTable({ eventos, onEdit, onDelete, onViewRegras }: EventosTableProps) {
+export function EventosTable({ eventos, onDelete, onViewRegras }: EventosTableProps) {
   if (eventos.length === 0) {
     return <div className="p-4 text-center text-muted-foreground">Nenhum evento encontrado.</div>
   }
@@ -35,7 +35,9 @@ export function EventosTable({ eventos, onEdit, onDelete, onViewRegras }: Evento
               <TableCell>{ev.local}</TableCell>
               <TableCell className="text-right space-x-2">
                 <Button variant="outline" size="sm" onClick={() => onViewRegras(ev.id)}>Regras</Button>
-                <Button variant="secondary" size="sm" onClick={() => onEdit(ev)}>Editar</Button>
+                <EventoFormDialog initialData={ev}>
+                  <Button variant="secondary" size="sm">Editar</Button>
+                </EventoFormDialog>
                 <Button variant="destructive" size="sm" onClick={() => onDelete(ev.id)}>Excluir</Button>
               </TableCell>
             </TableRow>
