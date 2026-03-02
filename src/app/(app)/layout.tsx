@@ -6,7 +6,7 @@ import { Navbar } from "@/components/navbar"
 import { AppSidebar } from "@/components/app-sidebar"
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated, isInitializing } = useAuth()
   const router = useRouter()
   const [mounted, setMounted] = React.useState(false)
 
@@ -15,12 +15,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   }, [])
 
   React.useEffect(() => {
-    if (mounted && !isAuthenticated) {
+    if (mounted && !isInitializing && !isAuthenticated) {
       router.push("/login")
     }
-  }, [mounted, isAuthenticated, router])
+  }, [mounted, isInitializing, isAuthenticated, router])
 
-  if (!mounted || !isAuthenticated) {
+  if (!mounted || isInitializing || !isAuthenticated) {
     return <div className="flex bg-background min-h-screen items-center justify-center">Carregando...</div>
   }
 

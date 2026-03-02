@@ -37,7 +37,7 @@ export function LoginForm() {
     try {
       setIsLoading(true)
       const res = await authApi.login(data)
-      login(res.token)
+      login(res.data.token)
       toast.success("Login realizado com sucesso!")
       router.push("/dashboard")
     } catch (error: any) {
@@ -52,7 +52,7 @@ export function LoginForm() {
       <CardHeader>
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
-          Insira seu e-mail e senha para acessar (use admin@vlab.com / 123).
+          Insira seu e-mail e senha para acessar (use admin@eventflow.com / 123).
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -62,7 +62,7 @@ export function LoginForm() {
             <Input
               id="email"
               type="email"
-              placeholder="admin@vlab.com"
+              placeholder="admin@eventflow.com"
               {...register("email")}
             />
             {errors.email && (

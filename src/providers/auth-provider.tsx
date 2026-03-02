@@ -9,6 +9,7 @@ interface AuthUser {
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  isInitializing: boolean;
   token: string | null;
   user: AuthUser | null;
   login: (token: string) => void;
@@ -20,6 +21,7 @@ const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = React.useState<string | null>(null);
   const [user, setUser] = React.useState<AuthUser | null>(null);
+  const [isInitializing, setIsInitializing] = React.useState(true);
 
   const decodeToken = (jwtToken: string) => {
     try {
@@ -42,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.removeItem("auth_token");
       }
     }
+    setIsInitializing(false);
   }, []);
 
   const login = (newToken: string) => {
@@ -60,7 +63,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated: !!token, token, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: !!token, isInitializing, token, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
