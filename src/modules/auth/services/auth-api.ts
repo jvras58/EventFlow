@@ -2,19 +2,18 @@ import { LoginInput } from "../schemas/auth-schema"
 import { LoginResponse } from "../types/auth"
 
 export const authApi = {
-    login: async (input: LoginInput): Promise<LoginResponse> => {
-        const res = await fetch("/api/auth/login", {
+    login: async (data: LoginInput): Promise<LoginResponse> => {
+        const response = await fetch("/api/auth/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(input)
+            body: JSON.stringify(data),
         })
 
-        const data = await res.json()
-
-        if (!res.ok) {
-            throw new Error(data.error?.message || "Erro ao fazer login")
+        if (!response.ok) {
+            const errorData = await response.json()
+            throw new Error(errorData.error?.message || "Falha no login")
         }
 
-        return data.data
+        return response.json()
     }
 }
