@@ -8,9 +8,10 @@ datasource db {
 }
 
 model User {
-  id    String @id @default(cuid())
-  email String @unique
+  id    String  @id @default(cuid())
+  email String  @unique
   senha String
+  nome  String?
 }
 
 model Evento {
@@ -33,10 +34,10 @@ model Participante {
 }
 
 model RegraCheckin {
-  id        String   @id @default(cuid())
-  nome      String
-  tipo      String   // "HORARIO", "DOCUMENTO", "PAGAMENTO"
-  ativa     Boolean  @default(true)
-  eventoId  String
-  evento    Evento   @relation(fields: [eventoId], references: [id])
+  id       String  @id @default(cuid())
+  nome     String
+  tipo     String // "HORARIO", "DOCUMENTO", "PAGAMENTO"
+  ativa    Boolean @default(true)
+  eventoId String
+  evento   Evento  @relation(fields: [eventoId], references: [id])
 }

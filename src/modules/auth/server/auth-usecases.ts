@@ -21,7 +21,7 @@ export const authUsecases = {
             throw new Error("Credenciais inválidas")
         }
 
-        const token = await new SignJWT({ userId: user.id, email: user.email })
+        const token = await new SignJWT({ userId: user.id, email: user.email, nome: user.nome })
             .setProtectedHeader({ alg: "HS256" })
             .setExpirationTime("24h")
             .sign(JWT_SECRET)
@@ -39,10 +39,11 @@ export const authUsecases = {
 
         const user = await authRepo.createUser({
             email: input.email,
-            senha: hashedPassword
+            senha: hashedPassword,
+            nome: input.nome
         })
 
-        const token = await new SignJWT({ userId: user.id, email: user.email })
+        const token = await new SignJWT({ userId: user.id, email: user.email, nome: user.nome })
             .setProtectedHeader({ alg: "HS256" })
             .setExpirationTime("24h")
             .sign(JWT_SECRET)

@@ -5,6 +5,7 @@ import * as React from "react"
 interface AuthUser {
   id: string;
   email: string;
+  nome?: string;
 }
 
 interface AuthContextType {
@@ -27,7 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const payloadBase64 = jwtToken.split('.')[1];
       const decodedInfo = JSON.parse(atob(payloadBase64));
-      return { id: decodedInfo.userId, email: decodedInfo.email };
+      return { id: decodedInfo.userId, email: decodedInfo.email, nome: decodedInfo.nome };
     } catch (error) {
       return null;
     }
