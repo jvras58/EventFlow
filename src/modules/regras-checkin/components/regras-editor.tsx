@@ -43,7 +43,13 @@ export function RegrasEditor({ eventoId }: RegrasEditorProps) {
   const validation = React.useMemo(() => validateRegras(regrasLocais), [regrasLocais])
 
   const handleAdd = () => {
-    setRegrasLocais([...regrasLocais, { nome: "Nova Regra", tipo: "HORARIO", ativa: true }])
+    setRegrasLocais([...regrasLocais, { 
+      nomeRegra: "Nova Regra", 
+      ativo: true, 
+      obrigatorio: true,
+      liberarMinAntes: 60,
+      encerrarMinDepois: 0
+    }])
   }
 
   const handleRemove = (index: number) => {

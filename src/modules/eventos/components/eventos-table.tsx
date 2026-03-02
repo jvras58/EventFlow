@@ -3,6 +3,7 @@ import * as React from "react"
 import { Evento } from "../types/evento"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Badge } from "@/components/ui/badge"
 import { EventoFormDialog } from "./evento-form-dialog"
 
 interface EventosTableProps {
@@ -24,6 +25,7 @@ export function EventosTable({ eventos, onDelete, onViewRegras }: EventosTablePr
             <TableHead>Nome</TableHead>
             <TableHead>Data</TableHead>
             <TableHead>Local</TableHead>
+            <TableHead>Status</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -33,6 +35,11 @@ export function EventosTable({ eventos, onDelete, onViewRegras }: EventosTablePr
               <TableCell className="font-medium">{ev.nome}</TableCell>
               <TableCell>{new Date(ev.data).toLocaleDateString()}</TableCell>
               <TableCell>{ev.local}</TableCell>
+              <TableCell>
+                <Badge variant={ev.status === "ATIVO" ? "default" : "secondary"}>
+                  {ev.status}
+                </Badge>
+              </TableCell>
               <TableCell className="text-right space-x-2">
                 <Button variant="outline" size="sm" onClick={() => onViewRegras(ev.id)}>Regras</Button>
                 <EventoFormDialog initialData={ev}>

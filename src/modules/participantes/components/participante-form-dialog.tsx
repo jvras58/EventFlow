@@ -41,6 +41,7 @@ export function ParticipanteFormDialog({ children, initialData }: ParticipanteFo
     formState: { errors },
   } = useForm<ParticipanteInput>({
     resolver: zodResolver(ParticipanteSchema),
+    defaultValues: { checkIn: false }
   })
 
   React.useEffect(() => {

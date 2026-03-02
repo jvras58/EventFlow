@@ -19,6 +19,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface EventoFormDialogProps {
   children: React.ReactNode
@@ -34,10 +35,15 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<EventoInput>({
     resolver: zodResolver(EventoSchema),
+    defaultValues: { status: "ATIVO" }
   })
+
+  const statusValue = watch("status")
 
   React.useEffect(() => {
     if (isOpen) {
@@ -46,9 +52,10 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
           nome: initialData.nome,
           local: initialData.local,
           data: new Date(initialData.data).toISOString().substring(0, 16) as any,
+          status: initialData.status
         })
       } else {
-        reset({ nome: "", local: "", data: new Date() as any })
+        reset({ nome: "", local: "", data: new Date() as any, status: "ATIVO" })
       }
     }
   }, [isOpen, initialData, reset])
@@ -94,6 +101,19 @@ export function EventoFormDialog({ children, initialData }: EventoFormDialogProp
             <Label htmlFor="local">Local</Label>
             <Input id="local" {...register("local")} />
             {errors.local && <p className="text-sm text-destructive">{errors.local.message}</p>}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="status">Status</Label>
+            <Select value={statusValue} onValueChange={(val: "ATIVO" | "ENCERRADO") => setValue("status", val, { shouldValidate: true })}>
+              <SelectTrigger>
+                <SelectValue placeholder="Selecione um status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ATIVO">Ativo</SelectItem>
+                <SelectItem value="ENCERRADO">Encerrado</SelectItem>
+              </SelectContent>
+            </Select>
+            {errors.status && <p className="text-sm text-destructive">{errors.status.message}</p>}
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>Cancelar</Button>
