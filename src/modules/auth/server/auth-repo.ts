@@ -6,7 +6,7 @@ export const authRepo = {
             where: { email }
         })
     },
-    createUser: async (data: { email: string; senha: string; nome?: string }) => {
+    createUser: async (data: { email: string; passwordHash: string; nome?: string }) => {
         return prisma.user.create({
             data
         })

@@ -18,9 +18,11 @@ export const regrasRepo = {
             if (regras.length > 0) {
                 await tx.regraCheckin.createMany({
                     data: regras.map(r => ({
-                        nome: r.nome,
-                        tipo: r.tipo,
-                        ativa: r.ativa,
+                        nomeRegra: r.nomeRegra,
+                        ativo: r.ativo,
+                        obrigatorio: r.obrigatorio,
+                        liberarMinAntes: r.liberarMinAntes,
+                        encerrarMinDepois: r.encerrarMinDepois,
                         eventoId
                     }))
                 })

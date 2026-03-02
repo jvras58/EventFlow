@@ -6,5 +6,6 @@ export interface Participante {
     email: string
     eventoId: string
     evento?: Evento
+    checkIn: boolean
     createdAt: string | Date
 }

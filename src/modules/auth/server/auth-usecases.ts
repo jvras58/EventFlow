@@ -15,7 +15,7 @@ export const authUsecases = {
             throw new Error("Credenciais inválidas")
         }
 
-        const passwordMatch = await bcrypt.compare(input.senha, user.senha);
+        const passwordMatch = await bcrypt.compare(input.senha, user.passwordHash);
 
         if (!passwordMatch) {
             throw new Error("Credenciais inválidas")
@@ -39,7 +39,7 @@ export const authUsecases = {
 
         const user = await authRepo.createUser({
             email: input.email,
-            senha: hashedPassword,
+            passwordHash: hashedPassword,
             nome: input.nome
         })
 

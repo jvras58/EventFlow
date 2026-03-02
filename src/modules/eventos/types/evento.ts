@@ -3,5 +3,6 @@ export interface Evento {
     nome: string
     data: string | Date
     local: string
+    status: "ATIVO" | "ENCERRADO"
     createdAt: string | Date
 }
