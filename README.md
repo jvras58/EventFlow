@@ -104,3 +104,13 @@ Entre as regras **ativas** de um evento, **não é permitido** que os tipos **DO
 
 - O **front-end** valida preventivamente com estado controlado.  
 - O **back-end** bloqueia requisições inválidas, retornando `400 Bad Request` caso o cliente tente burlar a validação manualmente (por exemplo, alterando o JSON da API).
+
+***
+
+## 🔄 Fluxo de Criação e Ativação de Eventos
+
+Para garantir que nenhum evento opere sem diretrizes de check-in, foi implementado um fluxo obrigatório de configuração de regras:
+
+1. **Criação "Pendente":** Quando um novo evento é criado, ele nasce com o status `PENDENTE`. Nesse estado, o evento ainda não é considerado ativo no sistema.
+2. **Redirecionamento Automático:** Imediatamente após a criação, o usuário é redirecionado para a página de configuração de Regras de Check-in daquele evento.
+3. **Ativação:**  Ao criar e salvar a primeira regra de check-in válida, o sistema automaticamente atualiza o status do evento para `ATIVO`. Caso todas as regras sejam removidas, o evento volta ao status `PENDENTE`.
