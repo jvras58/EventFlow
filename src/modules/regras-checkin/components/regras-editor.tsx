@@ -39,6 +39,8 @@ function RegrasForm({ eventoId, initialRegras }: { eventoId: string, initialRegr
     onSuccess: () => {
       toast.success("Regras salvas com sucesso!")
       queryClient.invalidateQueries({ queryKey: ['regras', eventoId] })
+      queryClient.invalidateQueries({ queryKey: ['eventos'] })
+      queryClient.invalidateQueries({ queryKey: ['dashboardSummary'] })
     },
     onError: (error: Error) => toast.error(error.message)
   })
