@@ -3,11 +3,11 @@ import { RegrasEditor } from "@/modules/regras-checkin/components/regras-editor"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 
-export default async function RegrasCheckinPage({ params }: { params: { id: string } }) {
-  const { id } = await params
-  
+export default function RegrasCheckinPage({ params }: { params: { id: string } }) {
+  const { id } = params
+
   return (
-    <ContentLayout 
+    <ContentLayout
       title="Regras de Check-in"
       actions={
         <Button variant="outline" asChild>
