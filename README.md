@@ -1,6 +1,6 @@
-# VLab Desafio — Sistema de Eventos e Check-in
+# EventFlow — Sistema de Eventos e Check-in
 
-Este projeto é a implementação do desafio **VLab**, um sistema web para **gestão de eventos, participantes e regras de check-in**, construído com as melhores práticas de **Front-end** e **Back-end**.
+Este projeto é a implementação do **EventFlow**, um sistema web para **gestão de eventos, participantes e regras de check-in**, construído com as melhores práticas de **Front-end** e **Back-end**.
 
 ## 🧰 Tecnologias Utilizadas
 
@@ -50,8 +50,9 @@ npx tsx prisma/seed.ts
 
 Isso criará um usuário administrador padrão:
 
-- **E-mail:** admin@vlab.com  
+- **E-mail:** admin@eventflow.com  
 - **Senha:** 123
+
 
 ### 4. Rodar o Servidor
 
