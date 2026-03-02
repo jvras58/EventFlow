@@ -1,0 +1,35 @@
+import prisma from "@/lib/prisma"
+import { RegraCheckinInput } from "../schemas/regra-checkin-schema"
+
+export const regrasRepo = {
+    getRegrasByEventoId: async (eventoId: string) => {
+        return prisma.regraCheckin.findMany({
+            where: { eventoId }
+        })
+    },
+    replaceRegras: async (eventoId: string, regras: RegraCheckinInput[]) => {
+        // Transação para substituir as regras
+        return prisma.$transaction(async (tx) => {
+            // Deleta as antigas
+            await tx.regraCheckin.deleteMany({
+                where: { eventoId }
+            })
+            // Cria as novas
+            if (regras.length > 0) {
+                await tx.regraCheckin.createMany({
+                    data: regras.map(r => ({
+                        nome: r.nome,
+                        tipo: r.tipo,
+                        ativa: r.ativa,
+                        eventoId
+                    }))
+                })
+            }
+
+            // Retorna as novas do banco
+            return tx.regraCheckin.findMany({
+                where: { eventoId }
+            })
+        })
+    }
+}
