@@ -1,13 +1,18 @@
 import { PrismaClient } from '@prisma/client'
+import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
 async function main() {
+    const hashedPassword = await bcrypt.hash('123', 10)
+
     const user = await prisma.user.upsert({
         where: { email: 'admin@eventflow.com' },
-        update: {},
+        update: {
+            senha: hashedPassword
+        },
         create: {
             email: 'admin@eventflow.com',
-            senha: '123', // Em um app real, colocaríamos um hash real aqui
+            senha: hashedPassword,
         },
     })
 
