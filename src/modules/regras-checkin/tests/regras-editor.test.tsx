@@ -1,4 +1,3 @@
-import React from 'react'
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { RegrasEditor } from '../components/regras-editor'
@@ -86,6 +85,39 @@ describe('RegrasEditor Integration Tests', () => {
 
     await waitFor(() => {
       expect(screen.getByText('O evento não possui nenhuma regra configurada.')).toBeInTheDocument()
+    })
+  })
+
+  describe('Business Logic Validation in UI', () => {
+    it('disables the save button and shows error when no rules are present', async () => {
+      mockRegrasApi.getRegras.mockResolvedValue([])
+      renderWithProviders(<RegrasEditor eventoId={mockEventoId} />)
+
+      await waitFor(() => {
+        expect(screen.getByText('O evento não possui nenhuma regra configurada.')).toBeInTheDocument()
+      })
+
+      const alertText = screen.getByText(/O evento deve ter pelo menos 1 regra/i)
+      expect(alertText).toBeInTheDocument()
+
+      const saveButton = screen.getByRole('button', { name: /Salvar Alterações/i })
+      expect(saveButton).toBeDisabled()
+    })
+
+    it('shows structural conflict warning when rules overlap', async () => {
+      const rule1 = generateMockRule({ nomeRegra: 'Test Rule 1', liberarMinAntes: 120, encerrarMinDepois: -60 })
+      const rule2 = generateMockRule({ nomeRegra: 'Test Rule 2', liberarMinAntes: 30, encerrarMinDepois: 60 })
+      
+      mockRegrasApi.getRegras.mockResolvedValue([rule1, rule2])
+      renderWithProviders(<RegrasEditor eventoId={mockEventoId} />)
+
+      await waitFor(() => {
+        const errorMsg = screen.getByText(/Conflito estrutural/i)
+        expect(errorMsg).toBeInTheDocument()
+      })
+
+      const saveButton = screen.getByRole('button', { name: /Salvar Alterações/i })
+      expect(saveButton).toBeDisabled()
     })
   })
 })
