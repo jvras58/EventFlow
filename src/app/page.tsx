@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { CalendarCheck, ShieldCheck, Users, ArrowRight } from "lucide-react"
+import { LandingNavButtons } from "@/components/landing-nav-buttons"
 
 export default function LandingPage() {
   return (
@@ -15,15 +16,7 @@ export default function LandingPage() {
             </div>
             <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-primary to-violet-400 bg-clip-text text-transparent">EventFlow</span>
           </div>
-          <div className="flex items-center gap-4">
-            <ThemeToggle />
-            <Link href="/login">
-              <Button variant="ghost" className="hidden sm:flex">Entrar</Button>
-            </Link>
-            <Link href="/dashboard">
-              <Button>Teste Agora</Button>
-            </Link>
-          </div>
+          <LandingNavButtons />
         </div>
       </header>
 
@@ -56,7 +49,7 @@ export default function LandingPage() {
                 </Link>
                 <Link href="/login">
                   <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                    Área Logada (Login)
+                    Área Logada
                   </Button>
                 </Link>
               </div>
