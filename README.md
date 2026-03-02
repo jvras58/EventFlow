@@ -51,7 +51,7 @@ npx tsx prisma/seed.ts
 Isso criará um usuário administrador padrão:
 
 - **E-mail:** admin@eventflow.com  
-- **Senha:** 123
+- **Senha:** admin123
 
 
 ### 4. Rodar o Servidor
