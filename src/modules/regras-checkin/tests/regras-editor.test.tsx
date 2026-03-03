@@ -39,12 +39,12 @@ describe('RegrasEditor Integration Tests', () => {
   })
 
   it('renders existing rules using fixtures', async () => {
-    const mockRule = generateMockRule({ nomeRegra: 'Fixtured Rule 123' })
+    const mockRule = generateMockRule({ nomeRegra: 'DOCUMENTO' })
     mockRegrasApi.getRegras.mockResolvedValue([mockRule])
     renderWithProviders(<RegrasEditor eventoId={mockEventoId} />)
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('Fixtured Rule 123')).toBeInTheDocument()
+      expect(screen.getByText('DOCUMENTO')).toBeInTheDocument()
       expect(screen.getByDisplayValue('30')).toBeInTheDocument()
     })
   })
@@ -61,19 +61,19 @@ describe('RegrasEditor Integration Tests', () => {
     await user.click(screen.getByText('+ Adicionar Regra'))
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue('Nova Regra')).toBeInTheDocument()
+      expect(screen.getByText('DOCUMENTO')).toBeInTheDocument()
     })
   })
 
   it('removes a rule through the UI interaction', async () => {
     const user = userEvent.setup()
-    const mockRule = generateMockRule()
+    const mockRule = generateMockRule({ nomeRegra: 'DOCUMENTO' })
     mockRegrasApi.getRegras.mockResolvedValue([mockRule])
     
     renderWithProviders(<RegrasEditor eventoId={mockEventoId} />)
 
     await waitFor(() => {
-      expect(screen.getByDisplayValue(mockRule.nomeRegra)).toBeInTheDocument()
+      expect(screen.getByText('DOCUMENTO')).toBeInTheDocument()
     })
 
     const buttons = screen.getAllByRole('button')
@@ -105,14 +105,30 @@ describe('RegrasEditor Integration Tests', () => {
     })
 
     it('shows structural conflict warning when rules overlap', async () => {
-      const rule1 = generateMockRule({ nomeRegra: 'Test Rule 1', liberarMinAntes: 120, encerrarMinDepois: -60 })
-      const rule2 = generateMockRule({ nomeRegra: 'Test Rule 2', liberarMinAntes: 30, encerrarMinDepois: 60 })
+      const rule1 = generateMockRule({ nomeRegra: 'DOCUMENTO', liberarMinAntes: 120, encerrarMinDepois: -60 })
+      const rule2 = generateMockRule({ nomeRegra: 'DOCUMENTO', liberarMinAntes: 30, encerrarMinDepois: 60 })
       
       mockRegrasApi.getRegras.mockResolvedValue([rule1, rule2])
       renderWithProviders(<RegrasEditor eventoId={mockEventoId} />)
 
       await waitFor(() => {
         const errorMsg = screen.getByText(/Conflito estrutural/i)
+        expect(errorMsg).toBeInTheDocument()
+      })
+
+      const saveButton = screen.getByRole('button', { name: /Salvar Alterações/i })
+      expect(saveButton).toBeDisabled()
+    })
+
+    it('shows conflict warning whenDOCUMENTO and PAGAMENTO are active', async () => {
+      const rule1 = generateMockRule({ nomeRegra: 'DOCUMENTO', ativo: true })
+      const rule2 = generateMockRule({ nomeRegra: 'PAGAMENTO', ativo: true })
+      
+      mockRegrasApi.getRegras.mockResolvedValue([rule1, rule2])
+      renderWithProviders(<RegrasEditor eventoId={mockEventoId} />)
+
+      await waitFor(() => {
+        const errorMsg = screen.getByText(/Não é permitido ativar as regras DOCUMENTO e PAGAMENTO simultaneamente/i)
         expect(errorMsg).toBeInTheDocument()
       })
 

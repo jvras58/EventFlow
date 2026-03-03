@@ -49,7 +49,7 @@ function RegrasForm({ eventoId, initialRegras }: { eventoId: string, initialRegr
 
   const handleAdd = () => {
     setRegrasLocais([...regrasLocais, { 
-      nomeRegra: "Nova Regra", 
+      nomeRegra: "DOCUMENTO", 
       ativo: true, 
       obrigatorio: true,
       liberarMinAntes: 60,

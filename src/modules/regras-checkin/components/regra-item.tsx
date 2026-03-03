@@ -1,11 +1,12 @@
 import * as React from "react"
-import { RegraCheckinInput } from "../schemas/regra-checkin-schema"
+import { RegraCheckinInput, TIPOS_DE_REGRA } from "../schemas/regra-checkin-schema"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Card, CardContent } from "@/components/ui/card"
 import { Trash2 } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface RegraItemProps {
   regra: RegraCheckinInput
@@ -29,12 +30,22 @@ export function RegraItem({ regra, index, onChange, onRemove }: RegraItemProps) 
         <div className="flex-1 space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1">
-              <Label className="text-xs">Nome da Regra</Label>
-              <Input 
-                value={regra.nomeRegra} 
-                onChange={e => onChange(index, { ...regra, nomeRegra: e.target.value })}
-                placeholder="Ex: Pagamento Autorizado"
-              />
+              <Label className="text-xs">Tipo de Regra</Label>
+              <Select
+                value={TIPOS_DE_REGRA.includes(regra.nomeRegra as any) ? regra.nomeRegra : ""}
+                onValueChange={(val) => onChange(index, { ...regra, nomeRegra: val })}
+              >
+                <SelectTrigger className="h-10">
+                  <SelectValue placeholder="Selecione o tipo..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {TIPOS_DE_REGRA.map((tipo) => (
+                    <SelectItem key={tipo} value={tipo}>
+                      {tipo}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             
             <div className="space-y-1 flex flex-col justify-end">

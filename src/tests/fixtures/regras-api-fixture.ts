@@ -2,21 +2,25 @@ import { RegraCheckinInput } from '@/modules/regras-checkin/schemas/regra-checki
 
 export const mockRegrasApi = {
     getRegras: jest.fn(),
-    updateRegras: jest.fn()
+    updateRegras: jest.fn(),
 }
 
-export const setupRegrasApiMock = () => {
-    jest.mock('@/modules/regras-checkin/services/regras-checkin-api', () => ({
-        regrasCheckinApi: mockRegrasApi
-    }))
+export const createMockRegrasApi = () => {
     return mockRegrasApi
 }
 
-export const generateMockRule = (overrides?: Partial<RegraCheckinInput>): RegraCheckinInput => ({
-    nomeRegra: 'Regra Teste Default',
-    ativo: true,
-    obrigatorio: true,
-    liberarMinAntes: 30,
-    encerrarMinDepois: 10,
-    ...overrides
-})
+let mockIdCounter = 1;
+
+export function generateMockRule(overrides?: Partial<RegraCheckinInput>): RegraCheckinInput {
+    mockIdCounter += 1;
+    return {
+        id: `mock-id-${mockIdCounter}`,
+        eventoId: 'mock-evento-1',
+        nomeRegra: "DOCUMENTO",
+        ativo: true,
+        obrigatorio: true,
+        liberarMinAntes: 30,
+        encerrarMinDepois: 10,
+        ...overrides
+    }
+}

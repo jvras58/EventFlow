@@ -1,9 +1,18 @@
 import { z } from "zod"
 
+export const TIPOS_DE_REGRA = [
+    "DOCUMENTO",
+    "PAGAMENTO",
+    "PRESENCA",
+    "OUTROS"
+] as const;
+
+export type TipoRegra = typeof TIPOS_DE_REGRA[number];
+
 export const RegraCheckinSchema = z.object({
     id: z.string().optional(),
     eventoId: z.string().optional(),
-    nomeRegra: z.string().min(1, "O nome é obrigatório"),
+    nomeRegra: z.string().min(1, "O nome é obrigatório"), // Mantém como min(1) por retrocompatibilidade se houver regras livres antigas no BD
     ativo: z.boolean().default(true),
     obrigatorio: z.boolean().default(true),
     liberarMinAntes: z.coerce.number().min(0, "Apenas valores positivos"),
@@ -25,6 +34,13 @@ export function validateRegras(regras: RegraCheckinInput[]): { valid: boolean; e
 
     if (regrasAtivas.length === 0 && regras.length > 0) {
         errors.push("O evento deve ter pelo menos 1 regra ativa.")
+    }
+
+    const hasDocumento = regrasAtivas.some(r => r.nomeRegra === "DOCUMENTO");
+    const hasPagamento = regrasAtivas.some(r => r.nomeRegra === "PAGAMENTO");
+
+    if (hasDocumento && hasPagamento) {
+        errors.push("Conflito: Não é permitido ativar as regras DOCUMENTO e PAGAMENTO simultaneamente.");
     }
 
     const regrasObrigatorias = regrasAtivas.filter(r => r.obrigatorio)
