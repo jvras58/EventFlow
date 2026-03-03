@@ -5,6 +5,9 @@ export const eventosRepo = {
     listEventos: async () => {
         return prisma.evento.findMany({ orderBy: { data: 'asc' } })
     },
+    getEventoById: async (id: string) => {
+        return prisma.evento.findUnique({ where: { id } })
+    },
     createEvento: async (data: EventoInput) => {
         return prisma.evento.create({ data: { ...data, data: new Date(data.data) } })
     },
