@@ -1,4 +1,10 @@
+import type { Metadata } from "next";
 import { RegisterForm } from "@/modules/auth/components/register-form"
+
+export const metadata: Metadata = {
+  title: "Cadastro - EventFlow",
+  description: "Cadastro de usuário",
+};
 
 export default function RegisterPage() {
   return (

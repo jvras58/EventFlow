@@ -1,13 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { CalendarCheck, ShieldCheck, Users, ArrowRight } from "lucide-react"
 import { LandingNavButtons } from "@/components/landing-nav-buttons"
+
+export const metadata: Metadata = {
+  title: "EventFlow",
+  description: "Plataforma completa para controle de eventos, participantes e validações de regras complexas de entrada.",
+};
 
 export default function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Landing Navbar Custom (simpler than app navbar) */}
+
       <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-2">
@@ -21,9 +26,7 @@ export default function LandingPage() {
       </header>
 
       <main className="flex-1">
-        {/* Hero Section */}
         <section className="relative w-full py-24 md:py-32 lg:py-48 overflow-hidden">
-          {/* Decorative background elements */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl opacity-50 pointer-events-none">
             <div className="absolute top-[20%] left-[20%] w-72 h-72 bg-primary/30 rounded-full blur-[100px] mix-blend-screen" />
             <div className="absolute top-[40%] right-[20%] w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] mix-blend-screen" />
@@ -60,7 +63,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Features Section */}
         <section className="w-full py-20 bg-background">
           <div className="container mx-auto px-4 md:px-6">
             <div className="text-center mb-16">
@@ -104,9 +106,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* Testimonials */}
         <section className="relative w-full py-20 bg-muted/30 overflow-hidden">
-           {/* Subtle background glow */}
            <div className="absolute bottom-0 right-0 w-full max-w-lg h-64 bg-primary/5 rounded-t-full blur-[100px] pointer-events-none" />
            <div className="container relative mx-auto px-4 md:px-6 z-10">
              <div className="text-center mb-16">
@@ -164,7 +164,6 @@ export default function LandingPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
         <section className="w-full py-20 bg-primary text-primary-foreground">
           <div className="container mx-auto px-4 md:px-6 text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6">
@@ -183,7 +182,6 @@ export default function LandingPage() {
         </section>
       </main>
 
-      {/* Footer */}
       <footer className="w-full border-t border-primary/10 py-8 bg-background/50 backdrop-blur-md">
         <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">

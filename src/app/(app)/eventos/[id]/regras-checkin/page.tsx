@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { ContentLayout } from "@/components/content-layout"
 import { RegrasEditor } from "@/modules/regras-checkin/components/regras-editor"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "Regras de Check-in - EventFlow",
+  description: "Regras de check-in",
+};
 
 export default async function RegrasCheckinPage({ params }: { params: { id: string } }) {
   const { id } = await params

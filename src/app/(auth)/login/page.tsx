@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link"
 import { CalendarCheck, ArrowLeft } from "lucide-react"
 import { LoginForm } from "@/modules/auth/components/login-form"
+
+export const metadata: Metadata = {
+  title: "Login - EventFlow",
+  description: "Login",
+};
 
 export default function LoginPage() {
   return (
