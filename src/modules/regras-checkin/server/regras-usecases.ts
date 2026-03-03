@@ -7,11 +7,9 @@ export const regrasUsecases = {
         return regrasRepo.getRegrasByEventoId(eventoId)
     },
     updateRegras: async (eventoId: string, regras: RegraCheckinInput[]) => {
-        // Valida se o evento existe
         const evento = await prisma.evento.findUnique({ where: { id: eventoId } })
         if (!evento) throw new Error("Evento não encontrado")
 
-        // Validação de negócio no servidor (bloqueia o request memo se o client burlar)
         const validation = validateRegras(regras)
         if (!validation.valid) {
             throw new Error(`Validação falhou: ${validation.errors.join(", ")}`)

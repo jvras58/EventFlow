@@ -8,13 +8,10 @@ export const regrasRepo = {
         })
     },
     replaceRegras: async (eventoId: string, regras: RegraCheckinInput[]) => {
-        // Transação para substituir as regras
         return prisma.$transaction(async (tx) => {
-            // Deleta as antigas
             await tx.regraCheckin.deleteMany({
                 where: { eventoId }
             })
-            // Cria as novas
             if (regras.length > 0) {
                 await tx.regraCheckin.createMany({
                     data: regras.map(r => ({
@@ -28,7 +25,6 @@ export const regrasRepo = {
                 })
             }
 
-            // Retorna as novas do banco
             return tx.regraCheckin.findMany({
                 where: { eventoId }
             })

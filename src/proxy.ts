@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 export function proxy(request: NextRequest) {
     const token = request.cookies.get('auth_token')?.value
     const isAuthPage = request.nextUrl.pathname.startsWith('/login') || request.nextUrl.pathname.startsWith('/register')
-    const isPublicAsset = request.nextUrl.pathname.match(/\.(.*)$/) // imagens, fontes, etc
+    const isPublicAsset = request.nextUrl.pathname.match(/\.(.*)$/)
 
     if (isPublicAsset) {
         return NextResponse.next()

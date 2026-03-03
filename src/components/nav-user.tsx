@@ -33,7 +33,6 @@ export function NavUser() {
     router.push("/login")
   }
 
-  // Obter as iniciais do email para o avatar fallback
   const initials = user.email ? user.email.substring(0, 2).toUpperCase() : "U"
 
   return (
