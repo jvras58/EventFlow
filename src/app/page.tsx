@@ -57,7 +57,7 @@ export default function LandingPage() {
                 </Link>
               </div>
               <p className="text-sm text-muted-foreground mt-4">
-                Use <strong className="text-foreground">admin@eventflow.com</strong> / <strong className="text-foreground">admin123</strong> para testar.
+                Use <strong className="text-foreground">test@eventflow.com</strong> / <strong className="text-foreground">test123</strong> para testar.
               </p>
             </div>
           </div>

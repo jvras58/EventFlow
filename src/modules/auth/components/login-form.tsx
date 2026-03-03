@@ -61,7 +61,7 @@ export function LoginForm() {
       <CardHeader className="pt-8">
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
-          Insira seu e-mail e senha para acessar (use admin@eventflow.com / admin123).
+          Insira seu e-mail e senha para acessar (use test@eventflow.com / test123).
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -71,7 +71,7 @@ export function LoginForm() {
             <Input
               id="email"
               type="email"
-              placeholder="admin@eventflow.com"
+              placeholder="jonhDoe@eventflow.com"
               {...register("email")}
             />
             {errors.email && (
