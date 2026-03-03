@@ -1,9 +1,7 @@
-import { SignJWT } from "jose"
 import bcrypt from "bcryptjs"
 import prisma from "@/lib/prisma"
 import { UserUpdateInput } from "../schemas/user-schema"
-import { JWT_SECRET } from "@/lib/auth"
-
+import { signJwt } from "@/lib/auth"
 
 export const userUsecases = {
     updateProfile: async (userId: string, input: UserUpdateInput) => {
@@ -28,10 +26,7 @@ export const userUsecases = {
             data: dataToUpdate
         })
 
-        const token = await new SignJWT({ userId: updatedUser.id, email: updatedUser.email })
-            .setProtectedHeader({ alg: "HS256" })
-            .setExpirationTime("24h")
-            .sign(JWT_SECRET)
+        const token = await signJwt({ userId: updatedUser.id, email: updatedUser.email })
 
         return { token }
     }

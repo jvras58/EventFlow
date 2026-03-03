@@ -1,8 +1,7 @@
 import { authRepo } from "./auth-repo"
 import { LoginInput, RegisterInput } from "../schemas/auth-schema"
-import { SignJWT } from "jose"
 import bcrypt from "bcryptjs"
-import { JWT_SECRET } from "@/lib/auth"
+import { signJwt } from "@/lib/auth"
 
 export const authUsecases = {
     login: async (input: LoginInput) => {
@@ -18,10 +17,7 @@ export const authUsecases = {
             throw new Error("Credenciais inválidas")
         }
 
-        const token = await new SignJWT({ userId: user.id, email: user.email, nome: user.nome })
-            .setProtectedHeader({ alg: "HS256" })
-            .setExpirationTime("24h")
-            .sign(JWT_SECRET)
+        const token = await signJwt({ userId: user.id, email: user.email, nome: user.nome })
 
         return { token }
     },
@@ -40,10 +36,7 @@ export const authUsecases = {
             nome: input.nome
         })
 
-        const token = await new SignJWT({ userId: user.id, email: user.email, nome: user.nome })
-            .setProtectedHeader({ alg: "HS256" })
-            .setExpirationTime("24h")
-            .sign(JWT_SECRET)
+        const token = await signJwt({ userId: user.id, email: user.email, nome: user.nome })
 
         return { token }
     }
