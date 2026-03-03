@@ -12,7 +12,7 @@ export type TipoRegra = typeof TIPOS_DE_REGRA[number];
 export const RegraCheckinSchema = z.object({
     id: z.string().optional(),
     eventoId: z.string().optional(),
-    nomeRegra: z.string().min(1, "O nome é obrigatório"), // Mantém como min(1) por retrocompatibilidade se houver regras livres antigas no BD
+    nomeRegra: z.enum(TIPOS_DE_REGRA),
     ativo: z.boolean().default(true),
     obrigatorio: z.boolean().default(true),
     liberarMinAntes: z.coerce.number().min(0, "Apenas valores positivos"),

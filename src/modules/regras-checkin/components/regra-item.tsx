@@ -33,7 +33,7 @@ export function RegraItem({ regra, index, onChange, onRemove }: RegraItemProps) 
               <Label className="text-xs">Tipo de Regra</Label>
               <Select
                 value={TIPOS_DE_REGRA.includes(regra.nomeRegra as any) ? regra.nomeRegra : ""}
-                onValueChange={(val) => onChange(index, { ...regra, nomeRegra: val })}
+                onValueChange={(val) => onChange(index, { ...regra, nomeRegra: val as any })}
               >
                 <SelectTrigger className="h-10">
                   <SelectValue placeholder="Selecione o tipo..." />
