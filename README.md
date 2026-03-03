@@ -1,13 +1,13 @@
 # EventFlow — Sistema de Eventos e Check-in
 
-Este projeto é a implementação do **EventFlow**, um sistema web para **gestão de eventos, participantes e regras de check-in**, construído com as melhores práticas de **Front-end** e **Back-end**.
+Este projeto é a implementação do **EventFlow**, um sistema web para **gestão de eventos, participantes e regras de check-in**.
 
 ## 🧰 Tecnologias Utilizadas
 
 - **Front-end**: Next.js 16 (App Router), React, Tailwind CSS, shadcn/ui  
 - **Back-end**: Next.js (Route Handlers), Prisma ORM, SQLite  
 - **Validação**: Zod, React Hook Form  
-- **Autenticação**: JWT (Jose), com token salvo via LocalStorage + Context API  
+- **Autenticação**: JWT (Jose), com token salvo via BearerToken + Context API + GetCookie
 
 ***
 
@@ -16,12 +16,12 @@ Este projeto é a implementação do **EventFlow**, um sistema web para **gestã
 ### Pré-requisitos
 
 - Node.js (v18 ou superior recomendado)
-- npm
+- pnpm
 
 ### 1. Clonar e Instalar
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### 2. Configurar Variáveis de Ambiente
@@ -57,7 +57,7 @@ Isso criará um usuário administrador padrão:
 ### 4. Rodar o Servidor
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Acesse: [http://localhost:3000](http://localhost:3000)
@@ -69,10 +69,10 @@ Para rodar a suíte de testes, utilize os seguintes comandos:
 
 ```bash
 # Rodar todos os testes de uma vez
-npm run test
+pnpm run test
 
 # Rodar os testes em modo watch (reexecuta com a mudança de arquivos)
-npm run test:watch
+pnpm run test:watch
 ```
 
 ***
