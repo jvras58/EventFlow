@@ -44,7 +44,6 @@ export function LoginForm() {
       router.push("/dashboard")
     } catch (error: any) {
       toast.error(error.message || "Erro ao realizar login")
-    } finally {
       setIsLoading(false)
     }
   }
@@ -73,6 +72,7 @@ export function LoginForm() {
               type="email"
               placeholder="jonhDoe@eventflow.com"
               {...register("email")}
+              disabled={isLoading}
             />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -85,6 +85,7 @@ export function LoginForm() {
               type="password"
               placeholder="Sua senha"
               {...register("senha")}
+              disabled={isLoading}
             />
             {errors.senha && (
               <p className="text-sm text-destructive">{errors.senha.message}</p>

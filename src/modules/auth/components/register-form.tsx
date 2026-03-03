@@ -43,7 +43,6 @@ export function RegisterForm() {
       router.push("/dashboard")
     } catch (error: any) {
       toast.error(error.message || "Erro ao criar conta")
-    } finally {
       setIsLoading(false)
     }
   }
@@ -65,6 +64,7 @@ export function RegisterForm() {
               type="email"
               placeholder="seu@email.com"
               {...register("email")}
+              disabled={isLoading}
             />
             {errors.email && (
               <p className="text-sm text-destructive">{errors.email.message}</p>
@@ -77,6 +77,7 @@ export function RegisterForm() {
               type="password"
               placeholder="Criar senha"
               {...register("senha")}
+              disabled={isLoading}
             />
             {errors.senha && (
               <p className="text-sm text-destructive">{errors.senha.message}</p>
@@ -89,6 +90,7 @@ export function RegisterForm() {
               type="password"
               placeholder="Confirmar senha"
               {...register("confirmSenha")}
+              disabled={isLoading}
             />
             {errors.confirmSenha && (
               <p className="text-sm text-destructive">{errors.confirmSenha.message}</p>
