@@ -2,10 +2,8 @@ import { SignJWT } from "jose"
 import bcrypt from "bcryptjs"
 import prisma from "@/lib/prisma"
 import { UserUpdateInput } from "../schemas/user-schema"
+import { JWT_SECRET } from "@/lib/auth"
 
-const JWT_SECRET = new TextEncoder().encode(
-    process.env.JWT_SECRET || "event-flow-secret-key-123"
-)
 
 export const userUsecases = {
     updateProfile: async (userId: string, input: UserUpdateInput) => {

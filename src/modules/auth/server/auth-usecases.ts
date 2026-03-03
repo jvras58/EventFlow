@@ -2,10 +2,7 @@ import { authRepo } from "./auth-repo"
 import { LoginInput, RegisterInput } from "../schemas/auth-schema"
 import { SignJWT } from "jose"
 import bcrypt from "bcryptjs"
-
-const JWT_SECRET = new TextEncoder().encode(
-    process.env.JWT_SECRET || "event-flow-secret-key-123"
-)
+import { JWT_SECRET } from "@/lib/auth"
 
 export const authUsecases = {
     login: async (input: LoginInput) => {

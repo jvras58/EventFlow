@@ -1,6 +1,6 @@
 import { jwtVerify } from "jose"
 
-const JWT_SECRET = new TextEncoder().encode(
+export const JWT_SECRET = new TextEncoder().encode(
     process.env.JWT_SECRET || "event-flow-secret-key-123"
 )
 
