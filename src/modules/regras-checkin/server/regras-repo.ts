@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import { RegraCheckinInput } from "../schemas/regra-checkin-schema"
+import { RegraCheckinInput } from "@/modules/regras-checkin/schemas/regra-checkin-schema"
 
 export const regrasRepo = {
     getRegrasByEventoId: async (eventoId: string) => {

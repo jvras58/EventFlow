@@ -1,6 +1,6 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { RegrasEditor } from '../components/regras-editor'
+import { RegrasEditor } from '@/modules/regras-checkin/components/regras-editor'
 import { renderWithProviders } from '@/tests/fixtures/usequery-fixture'
 
 import { useAuth } from '@/providers/auth-provider'
@@ -10,7 +10,7 @@ jest.mock('@/providers/auth-provider', () => ({
   useAuth: jest.fn()
 }))
 
-jest.mock('../services/regras-checkin-api', () => ({
+jest.mock('@/modules/regras-checkin/services/regras-checkin-api', () => ({
   regrasCheckinApi: require('@/tests/fixtures/regras-api-fixture').mockRegrasApi
 }))
 

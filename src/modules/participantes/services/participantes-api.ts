@@ -1,5 +1,5 @@
-import { ParticipanteInput, ParticipanteUpdateInput } from "../schemas/participante-schema"
-import { Participante } from "../types/participante"
+import { ParticipanteInput, ParticipanteUpdateInput } from "@/modules/participantes/schemas/participante-schema"
+import { Participante } from "@/modules/participantes/types/participante"
 import { apiFetch } from "@/lib/http"
 
 export const participantesApi = {

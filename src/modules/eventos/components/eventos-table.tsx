@@ -1,10 +1,10 @@
 "use client"
-import * as React from "react"
-import { Evento } from "../types/evento"
+
+import { Evento } from "@/modules/eventos/types/evento"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { EventoFormDialog } from "./evento-form-dialog"
+import { EventoFormDialog } from "@/modules/eventos/components/evento-form-dialog"
 
 interface EventosTableProps {
   eventos: Evento[]

@@ -1,5 +1,5 @@
-import { regrasRepo } from "./regras-repo"
-import { RegraCheckinInput, validateRegras } from "../schemas/regra-checkin-schema"
+import { regrasRepo } from "@/modules/regras-checkin/server/regras-repo"
+import { RegraCheckinInput, validateRegras } from "@/modules/regras-checkin/schemas/regra-checkin-schema"
 import prisma from "@/lib/prisma"
 
 export const regrasUsecases = {

@@ -1,5 +1,5 @@
 import { eventosRepo } from "./eventos-repo"
-import { EventoInput, EventoUpdateInput } from "../schemas/evento-schema"
+import { EventoInput, EventoUpdateInput } from "@/modules/eventos/schemas/evento-schema"
 
 export const eventosUsecases = {
     listEventos: () => eventosRepo.listEventos(),

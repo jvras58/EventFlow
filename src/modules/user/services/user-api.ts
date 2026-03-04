@@ -1,4 +1,4 @@
-import { UserUpdateInput } from "../schemas/user-schema"
+import { UserUpdateInput } from "@/modules/user/schemas/user-schema"
 import { apiFetch } from "@/lib/http"
 
 export const userApi = {

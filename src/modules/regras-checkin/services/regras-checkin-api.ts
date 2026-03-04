@@ -1,4 +1,4 @@
-import { RegraCheckinInput } from "../schemas/regra-checkin-schema"
+import { RegraCheckinInput } from "@/modules/regras-checkin/schemas/regra-checkin-schema"
 import { apiFetch } from "@/lib/http"
 
 export const regrasCheckinApi = {

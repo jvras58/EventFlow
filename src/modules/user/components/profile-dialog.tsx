@@ -6,9 +6,9 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { UserUpdateInput, UserUpdateSchema } from "../schemas/user-schema"
+import { UserUpdateInput, UserUpdateSchema } from "@/modules/user/schemas/user-schema"
 import { useAuth } from "@/providers/auth-provider"
-import { userApi } from "../services/user-api"
+import { userApi } from "@/modules/user/services/user-api"
 
 interface ProfileDialogProps {
   open: boolean

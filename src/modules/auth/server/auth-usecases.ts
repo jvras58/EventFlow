@@ -1,5 +1,5 @@
 import { authRepo } from "./auth-repo"
-import { LoginInput, RegisterInput } from "../schemas/auth-schema"
+import { LoginInput, RegisterInput } from "@/modules/auth/schemas/auth-schema"
 import bcrypt from "bcryptjs"
 import { signJwt } from "@/lib/auth"
 

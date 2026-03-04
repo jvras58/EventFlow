@@ -1,8 +1,7 @@
 "use client"
-import * as React from "react"
 import { useQuery } from "@tanstack/react-query"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { dashboardApi } from "../services/dashboard-api"
+import { dashboardApi } from "@/modules/dashboard/services/dashboard-api"
 import { useAuth } from "@/providers/auth-provider"
 import { CalendarIcon, UsersIcon } from "lucide-react"
 

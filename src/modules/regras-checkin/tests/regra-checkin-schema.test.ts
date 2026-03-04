@@ -1,4 +1,4 @@
-import { validateRegras, RegraCheckinInput } from '../schemas/regra-checkin-schema'
+import { validateRegras, RegraCheckinInput } from "@/modules/regras-checkin/schemas/regra-checkin-schema"
 import { generateMockRule } from '@/tests/fixtures/regras-api-fixture'
 
 describe('validateRegras Business Logic Tests', () => {
@@ -10,8 +10,8 @@ describe('validateRegras Business Logic Tests', () => {
 
     it('should invalidate when all rules are inactive', () => {
         const regras: RegraCheckinInput[] = [
-            generateMockRule({ nomeRegra: 'Regra Inativa 1', ativo: false }),
-            generateMockRule({ nomeRegra: 'Regra Inativa 2', ativo: false })
+            generateMockRule({ nomeRegra: 'DOCUMENTO', ativo: false }),
+            generateMockRule({ nomeRegra: 'PRESENCA', ativo: false })
         ]
         const result = validateRegras(regras)
 
@@ -29,13 +29,13 @@ describe('validateRegras Business Logic Tests', () => {
 
     it('should invalidate mandatory rules with non-overlapping time windows (Structural Conflict)', () => {
         const rule1 = generateMockRule({
-            nomeRegra: 'Regra Credenciamento',
+            nomeRegra: 'DOCUMENTO',
             liberarMinAntes: 120,
             encerrarMinDepois: -60
         })
 
         const rule2 = generateMockRule({
-            nomeRegra: 'Regra Porta Principal',
+            nomeRegra: 'PRESENCA',
             liberarMinAntes: 30,
             encerrarMinDepois: 60
         })
@@ -49,13 +49,13 @@ describe('validateRegras Business Logic Tests', () => {
 
     it('should validate mandatory rules with overlapping time windows', () => {
         const rule1 = generateMockRule({
-            nomeRegra: 'Regra Credenciamento',
+            nomeRegra: 'DOCUMENTO',
             liberarMinAntes: 120,
             encerrarMinDepois: 0
         })
 
         const rule2 = generateMockRule({
-            nomeRegra: 'Regra Porta Principal',
+            nomeRegra: 'PRESENCA',
             liberarMinAntes: 30,
             encerrarMinDepois: 60
         })
@@ -68,13 +68,13 @@ describe('validateRegras Business Logic Tests', () => {
 
     it('should ignore structural conflicts for non-mandatory rules', () => {
         const rule1 = generateMockRule({
-            nomeRegra: 'Regra Credenciamento',
+            nomeRegra: 'DOCUMENTO',
             liberarMinAntes: 120,
             encerrarMinDepois: -60
         })
 
         const rule2 = generateMockRule({
-            nomeRegra: 'Regra Opcional',
+            nomeRegra: 'OUTROS',
             obrigatorio: false,
             liberarMinAntes: 30,
             encerrarMinDepois: 60

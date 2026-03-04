@@ -2,7 +2,7 @@
 import * as React from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useAuth } from "@/providers/auth-provider"
-import { dashboardApi } from "../services/dashboard-api"
+import { dashboardApi } from "@/modules/dashboard/services/dashboard-api"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { format } from "date-fns"

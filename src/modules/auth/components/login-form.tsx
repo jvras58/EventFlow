@@ -18,8 +18,8 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
-import { LoginSchema, LoginInput } from "../schemas/auth-schema"
-import { authApi } from "../services/auth-api"
+import { LoginSchema, LoginInput } from "@/modules/auth/schemas/auth-schema"
+import { authApi } from "@/modules/auth/services/auth-api"
 import { useAuth } from "@/providers/auth-provider"
 
 export function LoginForm() {

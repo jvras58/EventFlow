@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs"
 import prisma from "@/lib/prisma"
-import { UserUpdateInput } from "../schemas/user-schema"
+import { UserUpdateInput } from "@/modules/user/schemas/user-schema"
 import { signJwt } from "@/lib/auth"
 
 export const userUsecases = {

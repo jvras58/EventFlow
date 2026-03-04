@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import { ParticipanteInput, ParticipanteUpdateInput } from "../schemas/participante-schema"
+import { ParticipanteInput, ParticipanteUpdateInput } from "@/modules/participantes/schemas/participante-schema"
 
 export const participantesRepo = {
     listParticipantes: async () => {

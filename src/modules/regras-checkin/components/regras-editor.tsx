@@ -2,11 +2,11 @@
 import * as React from "react"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
-import { RegraCheckinInput, validateRegras } from "../schemas/regra-checkin-schema"
-import { regrasCheckinApi } from "../services/regras-checkin-api"
+import { RegraCheckinInput, validateRegras } from "@/modules/regras-checkin/schemas/regra-checkin-schema"
+import { regrasCheckinApi } from "@/modules/regras-checkin/services/regras-checkin-api"
 import { useAuth } from "@/providers/auth-provider"
-import { RegraItem } from "./regra-item"
-import { ValidacaoAlert } from "./validacao-alert"
+import { RegraItem } from "@/modules/regras-checkin/components/regra-item"
+import { ValidacaoAlert } from "@/modules/regras-checkin/components/validacao-alert"
 import { Button } from "@/components/ui/button"
 
 interface RegrasEditorProps {

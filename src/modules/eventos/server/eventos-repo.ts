@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma"
-import { EventoInput, EventoUpdateInput } from "../schemas/evento-schema"
+import { EventoInput, EventoUpdateInput } from "@/modules/eventos/schemas/evento-schema"
 
 export const eventosRepo = {
     listEventos: async () => {

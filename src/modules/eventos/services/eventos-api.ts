@@ -1,5 +1,5 @@
-import { EventoInput, EventoUpdateInput } from "../schemas/evento-schema"
-import { Evento } from "../types/evento"
+import { EventoInput, EventoUpdateInput } from "@/modules/eventos/schemas/evento-schema"
+import { Evento } from "@/modules/eventos/types/evento"
 import { apiFetch } from "@/lib/http"
 
 export const eventosApi = {

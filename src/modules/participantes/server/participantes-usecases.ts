@@ -1,5 +1,5 @@
-import { participantesRepo } from "./participantes-repo"
-import { ParticipanteInput, ParticipanteUpdateInput } from "../schemas/participante-schema"
+import { participantesRepo } from "@/modules/participantes/server/participantes-repo"
+import { ParticipanteInput, ParticipanteUpdateInput } from "@/modules/participantes/schemas/participante-schema"
 import { eventosUsecases } from "@/modules/eventos/server/eventos-usecases"
 
 export const participantesUsecases = {
