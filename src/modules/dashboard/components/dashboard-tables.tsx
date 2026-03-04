@@ -28,7 +28,7 @@ export function DashboardTables() {
 
     return (
         <div className="grid gap-4 md:grid-cols-2 mt-4">
-            <Card>
+            <Card className="min-w-0">
                 <CardHeader>
                     <CardTitle>Próximos Eventos</CardTitle>
                     <CardDescription>Eventos programados para os próximos dias.</CardDescription>
@@ -37,33 +37,35 @@ export function DashboardTables() {
                     {summary.proximosEventos.length === 0 ? (
                         <p className="text-sm text-muted-foreground text-center py-4">Nenhum evento próximo.</p>
                     ) : (
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Nome</TableHead>
-                                    <TableHead>Data</TableHead>
-                                    <TableHead>Status</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {summary.proximosEventos.map((evento) => (
-                                    <TableRow key={evento.id}>
-                                        <TableCell className="font-medium">{evento.nome}</TableCell>
-                                        <TableCell>{format(new Date(evento.data), "dd/MM/yyyy HH:mm", { locale: ptBR })}</TableCell>
-                                        <TableCell>
-                                            <Badge variant={evento.status === "ATIVO" ? "default" : "secondary"}>
-                                                {evento.status}
-                                            </Badge>
-                                        </TableCell>
+                        <div className="rounded-md border">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Nome</TableHead>
+                                        <TableHead>Data</TableHead>
+                                        <TableHead>Status</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {summary.proximosEventos.map((evento) => (
+                                        <TableRow key={evento.id}>
+                                            <TableCell className="font-medium">{evento.nome}</TableCell>
+                                            <TableCell>{format(new Date(evento.data), "dd/MM/yyyy HH:mm", { locale: ptBR })}</TableCell>
+                                            <TableCell>
+                                                <Badge variant={evento.status === "ATIVO" ? "default" : "secondary"}>
+                                                    {evento.status}
+                                                </Badge>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     )}
                 </CardContent>
             </Card>
 
-            <Card>
+            <Card className="min-w-0">
                 <CardHeader>
                     <CardTitle>Check-ins Recentes</CardTitle>
                     <CardDescription>Últimos check-ins realizados nos eventos.</CardDescription>
@@ -72,29 +74,31 @@ export function DashboardTables() {
                     {summary.checkinsRecentes.length === 0 ? (
                         <p className="text-sm text-muted-foreground text-center py-4">Nenhum check-in recente.</p>
                     ) : (
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Participante</TableHead>
-                                    <TableHead>Evento</TableHead>
-                                    <TableHead className="text-right">Horário</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {summary.checkinsRecentes.map((checkin) => (
-                                    <TableRow key={checkin.id}>
-                                        <TableCell>
-                                            <div className="font-medium">{checkin.nome}</div>
-                                            <div className="text-xs text-muted-foreground">{checkin.email}</div>
-                                        </TableCell>
-                                        <TableCell>{checkin.evento.nome}</TableCell>
-                                        <TableCell className="text-right">
-                                            {format(new Date(checkin.createdAt), "dd/MM HH:mm", { locale: ptBR })}
-                                        </TableCell>
+                        <div className="rounded-md border">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Participante</TableHead>
+                                        <TableHead>Evento</TableHead>
+                                        <TableHead className="text-right">Horário</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {summary.checkinsRecentes.map((checkin) => (
+                                        <TableRow key={checkin.id}>
+                                            <TableCell>
+                                                <div className="font-medium">{checkin.nome}</div>
+                                                <div className="text-xs text-muted-foreground">{checkin.email}</div>
+                                            </TableCell>
+                                            <TableCell>{checkin.evento.nome}</TableCell>
+                                            <TableCell className="text-right">
+                                                {format(new Date(checkin.createdAt), "dd/MM HH:mm", { locale: ptBR })}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     )}
                 </CardContent>
             </Card>
