@@ -27,9 +27,9 @@ export default function LandingPage() {
 
       <main className="flex-1">
         <section className="relative w-full py-24 md:py-32 lg:py-48 overflow-hidden">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl opacity-50 pointer-events-none">
-            <div className="absolute top-[20%] left-[20%] w-72 h-72 bg-primary/30 rounded-full blur-[100px] mix-blend-screen" />
-            <div className="absolute top-[40%] right-[20%] w-96 h-96 bg-violet-500/20 rounded-full blur-[120px] mix-blend-screen" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-4xl opacity-50 dark:opacity-20 pointer-events-none">
+            <div className="absolute top-[20%] left-[20%] w-72 h-72 bg-primary/30 rounded-full blur-[100px]" />
+            <div className="absolute top-[40%] right-[20%] w-96 h-96 bg-violet-500/20 rounded-full blur-[120px]" />
           </div>
           
           <div className="container relative mx-auto px-4 md:px-6 text-center z-10">
@@ -164,17 +164,17 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="w-full py-20 bg-primary text-primary-foreground">
+        <section className="w-full py-20 bg-primary dark:bg-primary/10 text-primary-foreground dark:text-foreground">
           <div className="container mx-auto px-4 md:px-6 text-center">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl mb-6">
               Pronto para transformar sua gestão?
             </h2>
-            <p className="md:text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+            <p className="md:text-lg opacity-90 dark:opacity-100 mb-8 max-w-2xl mx-auto dark:text-muted-foreground">
               Junte-se à revolução na operação de check-ins rápidos. 
               Clique abaixo e descubra a performance da nossa aplicação.
             </p>
             <Link href="/login">
-              <Button size="lg" variant="secondary" className="font-semibold px-8 hover:bg-secondary/90 text-primary">
+              <Button size="lg" variant="secondary" className="font-semibold px-8 hover:bg-secondary/90 text-primary dark:bg-primary dark:text-primary-foreground dark:hover:bg-primary/90">
                 Acessar o Sistema
               </Button>
             </Link>
