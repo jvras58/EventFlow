@@ -42,6 +42,7 @@ export function LoginForm() {
       login(res.data.token)
       toast.success("Login realizado com sucesso!")
       router.push("/dashboard")
+      router.refresh() // FIX: Gambiarra para forçar o login redirecionar automaticamente
     } catch (error: any) {
       toast.error(error.message || "Erro ao realizar login")
       setIsLoading(false)

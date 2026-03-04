@@ -41,6 +41,7 @@ export function RegisterForm() {
       login(res.data.token)
       toast.success("Conta criada com sucesso!")
       router.push("/dashboard")
+      router.refresh() // FIX: Gambiarra para forçar o login redirecionar automaticamente
     } catch (error: any) {
       toast.error(error.message || "Erro ao criar conta")
       setIsLoading(false)
